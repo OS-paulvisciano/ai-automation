@@ -38,6 +38,21 @@ ln -s ~/repos/ai-automation ~/.cursor/ai-automation
 
 **Why symlink?** This keeps your repos organized while allowing Cursor to access the framework at the expected location. Changes in either location are the same (they point to the same files).
 
+### 4. Setup Repo-Specific Access (Optional)
+
+For individual repositories, you can create a symlink to access the framework:
+
+```bash
+# In your repo root (e.g., runtime-mobile-widgets-js)
+mkdir -p .cursor
+ln -s ~/.cursor/ai-automation .cursor/ai-automation
+```
+
+This allows:
+- Access to shared framework via `.cursor/ai-automation/`
+- Repo-specific items in `.cursor/` (e.g., `plans/`, custom skills/agents)
+- Clear separation between shared and repo-specific configurations
+
 ### 2. Configure Personal Settings
 
 Create a `.env` file with your API keys (this file is gitignored):
@@ -65,8 +80,8 @@ FIGMA_API_KEY=your-figma-api-key
 ```
 
 The script will:
-- Read your credentials from `personal/mcp-credentials.json`
-- Merge with the shared MCP config from `infrastructure/mcp-config.json`
+- Read your credentials from `.env` file
+- Merge with the shared MCP config from `infrastructure/mcp-config.template.json`
 - Create `~/.cursor/mcp.json` with your credentials
 
 **Option B: Manual setup**
@@ -94,9 +109,10 @@ The framework uses a **priority-based override system** that allows customizatio
 ```
 Priority (Highest → Lowest):
 1. personal/              # Your personal overrides (gitignored)
-2. projects/{project}/     # Project-specific configs
-3. teams/{team}/          # Team-specific overrides
-4. skills/, agents/       # Org-level defaults (shared)
+2. .cursor/ (in repo)     # Repo-specific overrides (if .cursor/ai-automation symlink exists)
+3. projects/{project}/     # Project-specific configs
+4. teams/{team}/          # Team-specific overrides
+5. skills/, agents/       # Org-level defaults (shared)
 ```
 
 **How it works:**
@@ -106,11 +122,12 @@ Priority (Highest → Lowest):
 - **Personal overrides** (`personal/`) are your local customizations (never committed)
 
 **Example:**
-If you're working on `runtime-mobile-widgets` project:
+If you're working on `runtime-mobile-widgets` project with `.cursor/ai-automation/` symlink:
 1. AI looks for `personal/skills/pr-creation.md` (if exists, use it)
-2. Else looks for `projects/runtime-mobile-widgets/skills/pr-creation.md` (if exists, use it)
-3. Else looks for `teams/ui-components/skills/pr-creation.md` (if exists, use it)
-4. Else uses `skills/pr-creation.md` (org default)
+2. Else looks for `.cursor/skills/pr-creation.md` in repo (if exists, use it)
+3. Else looks for `projects/runtime-mobile-widgets/skills/pr-creation.md` (if exists, use it)
+4. Else looks for `teams/ui-components/skills/pr-creation.md` (if exists, use it)
+5. Else uses `skills/pr-creation.md` (org default)
 
 This allows teams to customize workflows while maintaining consistency across the organization.
 
@@ -154,10 +171,25 @@ Projects can have specific configurations and overrides:
 
 **Example:** Runtime Mobile Widgets project has its own Figma file key in `projects/runtime-mobile-widgets/config.json`.
 
+### Repo-Specific Customizations
+
+In individual repositories, create `.cursor/` folder with:
+- `ai-automation/` - Symlink to `~/.cursor/ai-automation` (shared framework)
+- `plans/` - Repo-specific automation plans
+- `skills/` - Repo-specific skill overrides
+- `agents/` - Repo-specific agent overrides
+
+**Example:**
+```bash
+# In your repo root
+mkdir -p .cursor/plans
+# Add story-specific automation plans here
+```
+
 ### Personal Customizations
 
 Create personal overrides in `personal/` (gitignored):
-- `personal/mcp-credentials.json` - Your API keys and credentials
+- `personal/.env` - Your API keys and credentials
 - `personal/skills/{skill-name}.md` - Personal skill customizations
 - `personal/agents/{agent-name}.md` - Personal workflow preferences
 
