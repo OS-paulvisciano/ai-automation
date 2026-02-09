@@ -201,6 +201,7 @@ These are never committed and take highest priority.
 - [Skills Guide](./skills/README.md) - Available skills and how to use them
 - [Agents Guide](./agents/README.md) - Available workflows
 - [Team Customization](./teams/README.md) - How to customize for your team
+- [TODO](./TODO.md) - Future enhancements and improvements
 
 ## License
 
