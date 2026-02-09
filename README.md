@@ -93,14 +93,17 @@ The script will:
 
 ## Usage
 
-### Referencing Skills
+### Using Skills and Agents
 
-When working with AI, reference skills and agents:
+Use natural language - the AI will automatically identify which skills/agents to use:
 
-- "Use skill:pr-creation to create a PR"
-- "Run agent:story-completion for story ROU-12345"
-- "Follow skill:jira-updates to update the story"
-- "Apply skill:branch-naming rules"
+- "Create a PR" → Uses PR creation rules
+- "Update the Jira story" → Uses Jira update rules
+- "Create a branch" → Uses branch naming rules
+- "Check if this matches Figma" → Uses design verification rules
+- "Complete story ROU-12345" → Uses story completion workflow
+
+**Prefixes are optional** - You can use `skill:` or `agent:` prefixes if you want to be explicit, but natural language works just as well.
 
 ### Configuration Hierarchy
 

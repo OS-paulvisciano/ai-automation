@@ -12,10 +12,16 @@ This repository contains shared AI automation rules, skills, and workflows for O
 
 ## Using Skills and Agents
 
-When the user requests automation tasks, reference skills and agents from this framework:
+When the user requests automation tasks, use natural language and automatically identify which skills/agents to use from this framework.
 
-- **Skills**: Use format `skill:{skill-name}` (e.g., `skill:pr-creation`, `skill:jira-updates`)
-- **Agents**: Use format `agent:{agent-name}` (e.g., `agent:story-completion`, `agent:design-verification`)
+**Natural Language Examples:**
+- "Create a PR" → Use `skills/pr-creation.md` rules
+- "Update the Jira story" → Use `skills/jira-updates.md` rules
+- "Create a branch" → Use `skills/branch-naming.md` rules
+- "Check if this matches Figma" → Use `skills/design-verification.md` rules
+- "Complete this story" → Use `agents/story-completion.md` workflow
+
+**Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
 
 ## Configuration Hierarchy
 
@@ -74,19 +80,22 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 
 - **Never commit credentials** - All credentials are in `.env` files (gitignored)
 - **Always validate** - Check that PR titles, branch names, etc. follow conventions
-- **Reference skills explicitly** - When user asks for automation, reference the specific skill
+- **Use natural language** - Infer which skill/agent to use from the user's request (no need for explicit prefixes)
+- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file and follow its rules
 - **Use project configs** - Check `projects/{project}/config.json` for project-specific settings (Figma file keys, Jira projects, etc.)
 
 ## Examples
 
 **User**: "Create a PR for my changes"
-**AI**: Use `skill:pr-creation` to create PR with proper title format, labels, and template sections.
+**AI**: Read `skills/pr-creation.md` and follow those rules to create PR with proper title format, labels, and template sections.
 
 **User**: "Update the Jira story with what I did"
-**AI**: Use `skill:jira-updates` to update the "What I Did" section with implementation details and verification steps.
+**AI**: Read `skills/jira-updates.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
 
 **User**: "Complete story ROU-12345"
-**AI**: Run `agent:story-completion` which will handle branch creation, implementation verification, Jira updates, and PR creation.
+**AI**: Read `agents/story-completion.md` and follow that workflow to handle branch creation, implementation verification, Jira updates, and PR creation.
 
 **User**: "Check if my component matches Figma"
-**AI**: Use `skill:design-verification` to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
+**AI**: Read `skills/design-verification.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
+
+**Note**: The AI should automatically identify which skill/agent to use from natural language. No need for explicit prefixes unless the user uses them.
