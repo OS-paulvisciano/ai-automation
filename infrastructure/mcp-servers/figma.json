@@ -1,0 +1,39 @@
+{
+  "name": "Framelink MCP for Figma",
+  "type": "mcp-server",
+  "command": "npx",
+  "args": [
+    "-y",
+    "figma-developer-mcp",
+    "--figma-api-key=${FIGMA_API_KEY}",
+    "--stdio"
+  ],
+  "description": "Figma design system integration for design verification",
+  "capabilities": [
+    "get-figma-data",
+    "download-figma-images",
+    "extract-design-tokens",
+    "compare-with-codebase"
+  ],
+  "setup": {
+    "requiredEnvVars": [
+      "FIGMA_API_KEY"
+    ],
+    "apiKeySource": "https://www.figma.com/settings",
+    "requiredPermissions": [
+      "file_content:read",
+      "file_metadata:read"
+    ],
+    "documentation": "https://github.com/modelcontextprotocol/servers"
+  },
+  "useCases": [
+    "Fetch component design specs from Figma",
+    "Extract design token values",
+    "Compare Figma specs with codebase tokens",
+    "Verify implementation matches designs",
+    "Download Figma images"
+  ],
+  "knownIssues": [
+    "API rate limits apply - cache responses when possible"
+  ]
+}

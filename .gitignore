@@ -1,0 +1,19 @@
+# Personal overrides (never commit)
+personal/
+*.local.json
+*.credentials.json
+
+# Generated files
+infrastructure/mcp-config.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local

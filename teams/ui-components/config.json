@@ -1,0 +1,16 @@
+{
+  "team": "ui-components",
+  "description": "UI Components team configuration",
+  "jira": {
+    "project": "ROU",
+    "defaultAssignee": "team-rotation"
+  },
+  "github": {
+    "defaultReviewers": ["ui-components-team"],
+    "defaultLabels": ["ui-components"]
+  },
+  "figma": {
+    "fileKey": "p8xYRIBjILWM1zG6AJtkAb",
+    "designSystem": "OutSystems Mobile UI Kit"
+  }
+}

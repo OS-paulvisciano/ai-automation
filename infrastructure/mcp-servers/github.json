@@ -1,0 +1,27 @@
+{
+  "name": "GitHub",
+  "type": "mcp-server",
+  "description": "GitHub integration via GitHub CLI (gh)",
+  "capabilities": [
+    "create-pr",
+    "update-pr",
+    "add-labels",
+    "manage-branches",
+    "create-commits",
+    "search-repos"
+  ],
+  "setup": {
+    "requiredTools": [
+      "gh (GitHub CLI)"
+    ],
+    "authentication": "Run 'gh auth login' to authenticate",
+    "documentation": "https://cli.github.com/manual/"
+  },
+  "useCases": [
+    "Create pull requests with proper formatting",
+    "Set labels on PRs",
+    "Manage branches",
+    "Create commits with proper messages"
+  ],
+  "notes": "Uses GitHub CLI (gh) - ensure it's installed and authenticated. Not a true MCP server, but accessible via terminal commands."
+}

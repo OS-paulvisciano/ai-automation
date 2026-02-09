@@ -1,0 +1,21 @@
+{
+  "project": "runtime-mobile-widgets-js",
+  "description": "Runtime Mobile Widgets JS component library",
+  "figma": {
+    "fileKey": "p8xYRIBjILWM1zG6AJtkAb",
+    "designSystem": "OutSystems Mobile UI Kit",
+    "url": "https://www.figma.com/design/p8xYRIBjILWM1zG6AJtkAb/OutSystems-Mobile-UI-Kit"
+  },
+  "jira": {
+    "project": "ROU"
+  },
+  "github": {
+    "repo": "runtime-mobile-widgets-js",
+    "baseBranch": "main"
+  },
+  "paths": {
+    "tokens": "src/scss/_variables.scss",
+    "components": "src/scripts/Components",
+    "stories": "src/scripts/Components/**/tests/*.stories.tsx"
+  }
+}

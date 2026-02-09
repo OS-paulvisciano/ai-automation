@@ -1,0 +1,40 @@
+{
+  "name": "browsermcp",
+  "type": "mcp-server",
+  "command": "npx",
+  "args": [
+    "@browsermcp/mcp@latest"
+  ],
+  "description": "Browser automation for visual verification and testing",
+  "capabilities": [
+    "navigate",
+    "screenshot",
+    "interact",
+    "accessibility-snapshot",
+    "console-logs",
+    "network-requests"
+  ],
+  "setup": {
+    "requiredTools": [
+      "npx (Node.js)"
+    ],
+    "documentation": "https://github.com/modelcontextprotocol/servers"
+  },
+  "useCases": [
+    "Visual verification of components in Storybook",
+    "Testing component interactions",
+    "Verifying responsive behavior",
+    "Cross-browser testing",
+    "Taking screenshots for documentation"
+  ],
+  "knownIssues": [
+    "Can be flaky/unreliable",
+    "May need retries for some operations",
+    "Connection stability varies"
+  ],
+  "alternatives": [
+    "Manual browser verification",
+    "Playwright",
+    "Puppeteer"
+  ]
+}
