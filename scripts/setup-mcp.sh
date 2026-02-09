@@ -10,7 +10,8 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 CURSOR_DIR="$HOME/.cursor"
 MCP_CONFIG="$CURSOR_DIR/mcp.json"
 SHARED_CONFIG="$REPO_ROOT/infrastructure/mcp-config.template.json"
-PERSONAL_CREDS="$REPO_ROOT/personal/mcp-credentials.json"
+ENV_FILE="$REPO_ROOT/.env"
+ENV_EXAMPLE="$REPO_ROOT/.env.example"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -26,51 +27,53 @@ if [ ! -f "$SHARED_CONFIG" ]; then
     exit 1
 fi
 
-# Check if personal credentials exist
-if [ ! -f "$PERSONAL_CREDS" ]; then
-    echo -e "${YELLOW}Warning: Personal credentials not found at $PERSONAL_CREDS${NC}"
-    echo "Creating template file..."
-    mkdir -p "$(dirname "$PERSONAL_CREDS")"
-    cat > "$PERSONAL_CREDS" << 'EOF'
-{
-  "ATLASSIAN_CLOUD_ID": "your-cloud-id",
-  "ATLASSIAN_EMAIL": "your-email@outsystems.com",
-  "FIGMA_API_KEY": "your-figma-api-key"
-}
+# Check if .env file exists
+if [ ! -f "$ENV_FILE" ]; then
+    echo -e "${YELLOW}Warning: .env file not found at $ENV_FILE${NC}"
+    if [ -f "$ENV_EXAMPLE" ]; then
+        echo "Creating .env from .env.example..."
+        cp "$ENV_EXAMPLE" "$ENV_FILE"
+        echo -e "${YELLOW}Please edit $ENV_FILE with your actual credentials${NC}"
+    else
+        echo "Creating .env template file..."
+        cat > "$ENV_FILE" << 'EOF'
+# MCP Server Credentials
+ATLASSIAN_CLOUD_ID=your-cloud-id
+ATLASSIAN_EMAIL=your-email@outsystems.com
+FIGMA_API_KEY=your-figma-api-key
 EOF
-    echo -e "${YELLOW}Please edit $PERSONAL_CREDS with your actual credentials${NC}"
+        echo -e "${YELLOW}Please edit $ENV_FILE with your actual credentials${NC}"
+    fi
     exit 1
 fi
 
 # Create .cursor directory if it doesn't exist
 mkdir -p "$CURSOR_DIR"
 
-# Read personal credentials
-if command -v jq &> /dev/null; then
-    # Use jq if available for better JSON handling
-    ATLASSIAN_CLOUD_ID=$(jq -r '.ATLASSIAN_CLOUD_ID // empty' "$PERSONAL_CREDS")
-    ATLASSIAN_EMAIL=$(jq -r '.ATLASSIAN_EMAIL // empty' "$PERSONAL_CREDS")
-    FIGMA_API_KEY=$(jq -r '.FIGMA_API_KEY // empty' "$PERSONAL_CREDS")
-else
-    # Fallback to grep/sed (less robust but works without jq)
-    ATLASSIAN_CLOUD_ID=$(grep -o '"ATLASSIAN_CLOUD_ID"[[:space:]]*:[[:space:]]*"[^"]*"' "$PERSONAL_CREDS" | sed 's/.*"\([^"]*\)".*/\1/' | head -1)
-    ATLASSIAN_EMAIL=$(grep -o '"ATLASSIAN_EMAIL"[[:space:]]*:[[:space:]]*"[^"]*"' "$PERSONAL_CREDS" | sed 's/.*"\([^"]*\)".*/\1/' | head -1)
-    FIGMA_API_KEY=$(grep -o '"FIGMA_API_KEY"[[:space:]]*:[[:space:]]*"[^"]*"' "$PERSONAL_CREDS" | sed 's/.*"\([^"]*\)".*/\1/' | head -1)
-fi
+# Load environment variables from .env file
+# This handles comments and empty lines
+set -a
+source "$ENV_FILE"
+set +a
+
+# Read credentials from environment
+ATLASSIAN_CLOUD_ID="${ATLASSIAN_CLOUD_ID:-}"
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-}"
+FIGMA_API_KEY="${FIGMA_API_KEY:-}"
 
 # Validate credentials
 if [ -z "$ATLASSIAN_CLOUD_ID" ] || [ "$ATLASSIAN_CLOUD_ID" = "your-cloud-id" ]; then
-    echo -e "${RED}Error: ATLASSIAN_CLOUD_ID not set in $PERSONAL_CREDS${NC}"
+    echo -e "${RED}Error: ATLASSIAN_CLOUD_ID not set in $ENV_FILE${NC}"
     exit 1
 fi
 
 if [ -z "$ATLASSIAN_EMAIL" ] || [ "$ATLASSIAN_EMAIL" = "your-email@outsystems.com" ]; then
-    echo -e "${RED}Error: ATLASSIAN_EMAIL not set in $PERSONAL_CREDS${NC}"
+    echo -e "${RED}Error: ATLASSIAN_EMAIL not set in $ENV_FILE${NC}"
     exit 1
 fi
 
 if [ -z "$FIGMA_API_KEY" ] || [ "$FIGMA_API_KEY" = "your-figma-api-key" ]; then
-    echo -e "${YELLOW}Warning: FIGMA_API_KEY not set in $PERSONAL_CREDS${NC}"
+    echo -e "${YELLOW}Warning: FIGMA_API_KEY not set in $ENV_FILE${NC}"
     echo "Figma MCP will not work without this key"
 fi
 
@@ -100,7 +103,7 @@ else
 fi
 
 echo -e "${GREEN}✓ MCP configuration created at $MCP_CONFIG${NC}"
-echo -e "${GREEN}✓ Credentials loaded from $PERSONAL_CREDS${NC}"
+echo -e "${GREEN}✓ Credentials loaded from $ENV_FILE${NC}"
 echo ""
 echo "Next steps:"
 echo "1. Restart Cursor to load the new MCP configuration"

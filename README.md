@@ -40,14 +40,20 @@ ln -s ~/repos/ai-automation ~/.cursor/ai-automation
 
 ### 2. Configure Personal Settings
 
-Create `personal/mcp-credentials.json` with your API keys (this file is gitignored):
+Create a `.env` file with your API keys (this file is gitignored):
 
-```json
-{
-  "ATLASSIAN_CLOUD_ID": "your-cloud-id",
-  "ATLASSIAN_EMAIL": "your-email@outsystems.com",
-  "FIGMA_API_KEY": "your-figma-api-key"
-}
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env with your actual credentials
+```
+
+The `.env` file should contain:
+```bash
+ATLASSIAN_CLOUD_ID=your-cloud-id
+ATLASSIAN_EMAIL=your-email@outsystems.com
+FIGMA_API_KEY=your-figma-api-key
 ```
 
 ### 3. Setup MCP Configuration
@@ -64,10 +70,11 @@ The script will:
 - Create `~/.cursor/mcp.json` with your credentials
 
 **Option B: Manual setup**
-1. Copy `infrastructure/mcp-config.json` to `~/.cursor/mcp.json`
-2. Replace `${ATLASSIAN_CLOUD_ID}`, `${ATLASSIAN_EMAIL}`, and `${FIGMA_API_KEY}` with your actual credentials from `personal/mcp-credentials.json`
+1. Copy `infrastructure/mcp-config.template.json` to `~/.cursor/mcp.json`
+2. Load your `.env` file: `source .env`
+3. Replace `${ATLASSIAN_CLOUD_ID}`, `${ATLASSIAN_EMAIL}`, and `${FIGMA_API_KEY}` with actual values from your `.env` file
 
-**Note:** The shared MCP config template is in `infrastructure/mcp-config.json` - it uses environment variable placeholders that get replaced with your personal credentials.
+**Note:** The shared MCP config template is in `infrastructure/mcp-config.template.json` - it uses environment variable placeholders that get replaced with your personal credentials from `.env`.
 
 ## Usage
 

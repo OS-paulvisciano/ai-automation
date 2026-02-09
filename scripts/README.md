@@ -7,8 +7,8 @@ Scripts to help set up and configure the AI Automation Framework.
 Merges shared MCP server configurations with your personal credentials.
 
 **What it does:**
-1. Reads your personal credentials from `personal/mcp-credentials.json`
-2. Takes the shared MCP config template from `infrastructure/mcp-config.json`
+1. Reads your personal credentials from `.env` file
+2. Takes the shared MCP config template from `infrastructure/mcp-config.template.json`
 3. Replaces environment variable placeholders with your actual credentials
 4. Creates/updates `~/.cursor/mcp.json` with the merged configuration
 
@@ -19,10 +19,11 @@ Merges shared MCP server configurations with your personal credentials.
 ```
 
 **Requirements:**
-- `personal/mcp-credentials.json` must exist with your credentials
-- Optional: `jq` for better JSON handling (falls back to sed if not available)
+- `.env` file must exist with your credentials (copy from `.env.example`)
+- Standard shell environment (bash/zsh)
 
 **Safety:**
 - Backs up existing `~/.cursor/mcp.json` before overwriting
-- Never commits credentials to git
+- Never commits credentials to git (`.env` is gitignored)
 - Validates credentials before creating config
+- Creates `.env` from `.env.example` if it doesn't exist
