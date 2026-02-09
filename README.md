@@ -19,17 +19,28 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 
 ### 1. Clone and Setup
 
+You have two options for setup:
+
+**Option A: Clone directly to Cursor folder**
 ```bash
 # Clone this repository
-git clone <your-repo-url> ~/.cursor/ai-automation
-
-# Or symlink if you prefer
-ln -s ~/repos/paul-visciano-ai-automation ~/.cursor/ai-automation
+git clone https://github.com/OS-paulvisciano/ai-automation.git ~/.cursor/ai-automation
 ```
+
+**Option B: Clone to repos folder and symlink (recommended)**
+```bash
+# Clone to your repos folder
+git clone https://github.com/OS-paulvisciano/ai-automation.git ~/repos/ai-automation
+
+# Create symlink so Cursor can access it
+ln -s ~/repos/ai-automation ~/.cursor/ai-automation
+```
+
+**Why symlink?** This keeps your repos organized while allowing Cursor to access the framework at the expected location. Changes in either location are the same (they point to the same files).
 
 ### 2. Configure Personal Settings
 
-Create `personal/mcp-credentials.json` with your API keys:
+Create `personal/mcp-credentials.json` with your API keys (this file is gitignored):
 
 ```json
 {
@@ -41,7 +52,7 @@ Create `personal/mcp-credentials.json` with your API keys:
 
 ### 3. Setup MCP Configuration
 
-Copy the MCP server configs to your `~/.cursor/mcp.json` and replace environment variables with your credentials.
+Copy the MCP server configs to your `~/.cursor/mcp.json` and replace environment variables with your credentials from `personal/mcp-credentials.json`.
 
 ## Usage
 
@@ -54,13 +65,32 @@ When working with AI, reference skills and agents:
 - "Follow skill:jira-updates to update the story"
 - "Apply skill:branch-naming rules"
 
-### Priority Order
+### Configuration Hierarchy
 
-The framework uses a priority system for overrides:
-1. `personal/` - Personal overrides (highest priority)
-2. `projects/{project}/` - Project-specific
-3. `teams/{team}/` - Team-specific
-4. `skills/`, `agents/` - Org-level defaults (lowest priority)
+The framework uses a **priority-based override system** that allows customization at multiple levels while maintaining shared defaults:
+
+```
+Priority (Highest → Lowest):
+1. personal/              # Your personal overrides (gitignored)
+2. projects/{project}/     # Project-specific configs
+3. teams/{team}/          # Team-specific overrides
+4. skills/, agents/       # Org-level defaults (shared)
+```
+
+**How it works:**
+- **Shared defaults** (`skills/`, `agents/`) provide org-wide standards
+- **Team overrides** (`teams/{team}/`) customize for specific teams
+- **Project overrides** (`projects/{project}/`) customize for specific projects
+- **Personal overrides** (`personal/`) are your local customizations (never committed)
+
+**Example:**
+If you're working on `runtime-mobile-widgets` project:
+1. AI looks for `personal/skills/pr-creation.md` (if exists, use it)
+2. Else looks for `projects/runtime-mobile-widgets/skills/pr-creation.md` (if exists, use it)
+3. Else looks for `teams/ui-components/skills/pr-creation.md` (if exists, use it)
+4. Else uses `skills/pr-creation.md` (org default)
+
+This allows teams to customize workflows while maintaining consistency across the organization.
 
 ## Contributing
 
@@ -81,8 +111,35 @@ The framework uses a priority system for overrides:
 ### Team Customizations
 
 Teams can override org-level skills/agents by creating:
-- `teams/{team-name}/skills/{skill-name}.md`
-- `teams/{team-name}/agents/{agent-name}.md`
+- `teams/{team-name}/skills/{skill-name}.md` - Override specific skill
+- `teams/{team-name}/agents/{agent-name}.md` - Override specific agent
+- `teams/{team-name}/config.json` - Team-specific configuration
+
+**Example:** UI Components team might override PR creation to add team-specific requirements:
+```bash
+# Create team override
+mkdir -p teams/ui-components/skills
+cp skills/pr-creation.md teams/ui-components/skills/pr-creation.md
+# Edit to add team-specific rules
+```
+
+### Project Customizations
+
+Projects can have specific configurations and overrides:
+- `projects/{project-name}/config.json` - Project settings (Figma file keys, Jira projects, etc.)
+- `projects/{project-name}/skills/{skill-name}.md` - Project-specific skill overrides
+- `projects/{project-name}/agents/{agent-name}.md` - Project-specific agent overrides
+
+**Example:** Runtime Mobile Widgets project has its own Figma file key in `projects/runtime-mobile-widgets/config.json`.
+
+### Personal Customizations
+
+Create personal overrides in `personal/` (gitignored):
+- `personal/mcp-credentials.json` - Your API keys and credentials
+- `personal/skills/{skill-name}.md` - Personal skill customizations
+- `personal/agents/{agent-name}.md` - Personal workflow preferences
+
+These are never committed and take highest priority.
 
 ## Documentation
 
