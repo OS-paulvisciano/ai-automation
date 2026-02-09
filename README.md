@@ -52,7 +52,22 @@ Create `personal/mcp-credentials.json` with your API keys (this file is gitignor
 
 ### 3. Setup MCP Configuration
 
-Copy the MCP server configs to your `~/.cursor/mcp.json` and replace environment variables with your credentials from `personal/mcp-credentials.json`.
+**Option A: Use the setup script (Recommended)**
+```bash
+# Run the setup script to merge shared config with your credentials
+./scripts/setup-mcp.sh
+```
+
+The script will:
+- Read your credentials from `personal/mcp-credentials.json`
+- Merge with the shared MCP config from `infrastructure/mcp-config.json`
+- Create `~/.cursor/mcp.json` with your credentials
+
+**Option B: Manual setup**
+1. Copy `infrastructure/mcp-config.json` to `~/.cursor/mcp.json`
+2. Replace `${ATLASSIAN_CLOUD_ID}`, `${ATLASSIAN_EMAIL}`, and `${FIGMA_API_KEY}` with your actual credentials from `personal/mcp-credentials.json`
+
+**Note:** The shared MCP config template is in `infrastructure/mcp-config.json` - it uses environment variable placeholders that get replaced with your personal credentials.
 
 ## Usage
 

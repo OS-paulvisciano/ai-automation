@@ -3,8 +3,9 @@ personal/
 *.local.json
 *.credentials.json
 
-# Generated files
+# Generated files (merged configs with credentials)
 infrastructure/mcp-config.json
+*.merged.json
 
 # OS files
 .DS_Store

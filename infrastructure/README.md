@@ -53,7 +53,13 @@ After setup, test each MCP server:
 ## Configuration Files
 
 - `mcp-servers/*.json` - Individual MCP server definitions
-- `mcp-config.json` - Example merged configuration (for reference)
+- `mcp-config.template.json` - Shared MCP configuration template (with placeholders)
+
+**How it works:**
+1. The shared template (`mcp-config.template.json`) contains the MCP server structure with environment variable placeholders
+2. Users run `scripts/setup-mcp.sh` to merge the template with their personal credentials
+3. The script creates `~/.cursor/mcp.json` with actual credentials (never committed)
+4. This allows sharing the MCP server structure without exposing credentials
 
 ## Troubleshooting
 
