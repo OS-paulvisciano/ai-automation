@@ -1,0 +1,92 @@
+# AI Automation Framework - Cursor Rules
+
+This repository contains shared AI automation rules, skills, and workflows for OutSystems teams.
+
+## Framework Structure
+
+- **`skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification)
+- **`agents/`** - Workflow definitions that combine multiple skills
+- **`infrastructure/`** - MCP server configurations
+- **`projects/`** - Project-specific configurations
+- **`teams/`** - Team-specific overrides
+
+## Using Skills and Agents
+
+When the user requests automation tasks, reference skills and agents from this framework:
+
+- **Skills**: Use format `skill:{skill-name}` (e.g., `skill:pr-creation`, `skill:jira-updates`)
+- **Agents**: Use format `agent:{agent-name}` (e.g., `agent:story-completion`, `agent:design-verification`)
+
+## Configuration Hierarchy
+
+When resolving which rules to use, follow this priority order:
+
+1. `personal/` - Personal overrides (highest priority, gitignored)
+2. `.cursor/` (in user's repo) - Repo-specific overrides
+3. `projects/{project}/` - Project-specific configs
+4. `teams/{team}/` - Team-specific overrides
+5. `skills/`, `agents/` - Org-level defaults (lowest priority, this repo)
+
+## Key Rules
+
+### PR Creation
+- **Always** use `skill:pr-creation` when creating pull requests
+- **Must** follow format: `<jira-issue>: <subject>` (with colon)
+- **Must** set at least one label
+- **Must** fill Context and Impacts sections
+
+### Jira Updates
+- **Always** use `skill:jira-updates` when updating Jira stories
+- **Must** update "What I Did" section with implementation details
+- **Must** include verification steps
+
+### Branch Naming
+- **Always** use `skill:branch-naming` when creating branches
+- **Must** follow format: `<issue-type>/<jira-issue-number>-<short-name>`
+- **Must** branch from `main`
+
+### Design Verification
+- **Always** use `skill:design-verification` when verifying designs against Figma
+- **Must** compare Figma values with codebase tokens
+- **Must** flag any discrepancies
+
+## Workflow Agents
+
+### Story Completion
+- Use `agent:story-completion` for complete story workflows
+- Combines: branch creation → implementation → documentation → PR creation
+- Automatically handles Jira updates and PR creation
+
+### Design Verification
+- Use `agent:design-verification` to verify component designs
+- Fetches Figma specs and compares with codebase
+- Provides comparison table of values
+
+## MCP Servers
+
+This framework uses the following MCP servers (configured in `~/.cursor/mcp.json`):
+- **Jira** (Atlassian MCP) - For issue management
+- **Figma** (Framelink MCP) - For design verification
+- **GitHub** (via CLI) - For PR management
+- **Browser** - For visual verification (can be flaky)
+
+## Important Notes
+
+- **Never commit credentials** - All credentials are in `.env` files (gitignored)
+- **Always validate** - Check that PR titles, branch names, etc. follow conventions
+- **Reference skills explicitly** - When user asks for automation, reference the specific skill
+- **Use project configs** - Check `projects/{project}/config.json` for project-specific settings (Figma file keys, Jira projects, etc.)
+
+## Examples
+
+**User**: "Create a PR for my changes"
+**AI**: Use `skill:pr-creation` to create PR with proper title format, labels, and template sections.
+
+**User**: "Update the Jira story with what I did"
+**AI**: Use `skill:jira-updates` to update the "What I Did" section with implementation details and verification steps.
+
+**User**: "Complete story ROU-12345"
+**AI**: Run `agent:story-completion` which will handle branch creation, implementation verification, Jira updates, and PR creation.
+
+**User**: "Check if my component matches Figma"
+**AI**: Use `skill:design-verification` to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
