@@ -14,12 +14,20 @@ Instead of removing process requirements, we're automating them using AI assista
 
 ### 1. Jira Integration (Atlassian MCP)
 
-**Status**: ✅ Working
+**Status**: ✅ Working (requires OAuth connection in Cursor)
 
 **Configuration**: 
 - MCP Server: Atlassian Cloud
-- Cloud ID: `${ATLASSIAN_CLOUD_ID}` (set in environment or personal config)
-- Email: `${ATLASSIAN_EMAIL}` (set in environment or personal config)
+- Cloud ID: `${ATLASSIAN_CLOUD_ID}` (set in `~/.cursor/mcp.json`)
+- Email: `${ATLASSIAN_EMAIL}` (set in `~/.cursor/mcp.json`)
+
+**Setup Steps**:
+1. Configure `~/.cursor/mcp.json` with your Atlassian credentials
+2. Restart Cursor
+3. Go to Settings → Tools & MCP
+4. Click "Connect" button next to Atlassian MCP
+5. Complete OAuth authentication in browser
+6. Verify connection status shows "Connected" with tools enabled
 
 **Capabilities**:
 - Search for Jira issues
