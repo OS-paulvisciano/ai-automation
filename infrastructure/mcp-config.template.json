@@ -1,5 +1,5 @@
 {
-  "_comment": "This is the shared MCP configuration template. Use setup-mcp.sh to merge with your personal credentials, or manually replace the environment variables.",
+  "_comment": "This is the shared MCP configuration template. Use node scripts/setup-mcp.js to merge with your personal credentials from .env file. NEVER hardcode credentials here - all values must use ${VAR} placeholders that get replaced by the setup script.",
   "mcpServers": {
     "Atlassian": {
       "url": "https://mcp.atlassian.com/v1/mcp",

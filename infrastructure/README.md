@@ -16,6 +16,15 @@ This directory contains MCP server definitions that can be used to configure you
 
 ## Setup Instructions
 
+### Important: MCP Configuration is User-Level
+
+**MCP configuration is stored at the user level** in `~/.cursor/mcp.json`, not in individual repositories. This means:
+- One MCP configuration per user (shared across all repos)
+- Credentials are stored in `.env` file in the ai-automation repo
+- The setup script merges the shared template with your personal credentials
+- **Never manually edit `mcp.json`** - always edit `.env` and use the setup script to regenerate `mcp.json`
+- The generated `mcp.json` will contain actual values (required by Cursor's MCP), but they come from `.env`
+
 ### 1. Install Required Tools
 
 - **Node.js** - For running MCP servers via npx
@@ -24,7 +33,7 @@ This directory contains MCP server definitions that can be used to configure you
 
 ### 2. Configure Credentials
 
-**All MCP credentials are stored in the ai-automation framework** so they can be shared across repositories. Create a `.env` file in the ai-automation repo root:
+**All MCP credentials are stored in the ai-automation framework's `.env` file** and are used to generate the user-level `~/.cursor/mcp.json`. Create a `.env` file in the ai-automation repo root:
 
 ```bash
 # Navigate to ai-automation repo
@@ -58,17 +67,27 @@ Run the setup script to merge the shared MCP config template with your credentia
 
 ```bash
 cd ~/.cursor/ai-automation
-./scripts/setup-mcp.sh
+node scripts/setup-mcp.js
 ```
 
 This will:
-- Read your credentials from `.env` file
-- Merge with the shared MCP config from `infrastructure/mcp-config.template.json`
-- Create `~/.cursor/mcp.json` with your credentials
+- Read **all credentials** from `.env` file (no hardcoded values)
+- Merge with the shared MCP config template from `infrastructure/mcp-config.template.json`
+- Replace all placeholder values (e.g., `${ATLASSIAN_CLOUD_ID}`) with actual values from `.env`
+- Create/update `~/.cursor/mcp.json` at the **user level** with your credentials
+
+**Important:**
+- The `.env` file is gitignored and never committed
+- The `mcp.json` file is created at the **user level** (`~/.cursor/mcp.json`), not in repositories
+- **Never manually edit `~/.cursor/mcp.json` with hardcoded values** - always use the setup script
+- All credential values must come from `.env` - the template uses placeholders that get replaced
 
 ### 4. Verify Setup
 
-After running the setup script, verify your `.env` file contains all required credentials and `~/.cursor/mcp.json` was created successfully.
+After running the setup script, verify:
+- Your `.env` file contains all required credentials
+- `~/.cursor/mcp.json` was created/updated successfully
+- All placeholder values (${...}) have been replaced with actual values from `.env`
 
 ### 5. Connect MCP Servers in Cursor
 
@@ -110,7 +129,7 @@ After connecting, test each MCP server:
 
 **How it works:**
 1. The shared template (`mcp-config.template.json`) contains the MCP server structure with environment variable placeholders
-2. Users run `scripts/setup-mcp.sh` to merge the template with their personal credentials
+2. Users run `node scripts/setup-mcp.js` to merge the template with their personal credentials
 3. The script creates `~/.cursor/mcp.json` with actual credentials (never committed)
 4. This allows sharing the MCP server structure without exposing credentials
 

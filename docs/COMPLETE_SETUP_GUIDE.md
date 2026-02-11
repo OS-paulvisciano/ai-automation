@@ -49,19 +49,30 @@ FIGMA_API_KEY=your-figma-api-key
 
 ## Step 3: Setup MCP Configuration
 
+**Important: MCP configuration is stored at USER LEVEL** (`~/.cursor/mcp.json`), not in repositories. 
+
+**How credentials work:**
+- The `.env` file is the **source of truth** - store all credentials here (never hardcode in `.env`)
+- The `mcp.json` file is **auto-generated** from `.env` and contains actual values (required by Cursor's MCP)
+- **Never manually edit `mcp.json`** with hardcoded values - always edit `.env` and regenerate using the setup script
+- The setup script pulls values from `.env` and generates `mcp.json` with actual values (Cursor requires this)
+
 ### Option A: Use Setup Script (Recommended)
 
 ```bash
 cd ~/.cursor/ai-automation
-./scripts/setup-mcp.sh
+node scripts/setup-mcp.js
 ```
 
 The script will:
-- Read credentials from `.env` file
-- Merge with shared MCP config template
-- Create `~/.cursor/mcp.json` with your credentials
+- Read **all credentials** from `.env` file (no hardcoded values)
+- Merge with shared MCP config template from `infrastructure/mcp-config.template.json`
+- Replace all placeholder values (e.g., `${ATLASSIAN_CLOUD_ID}`) with actual values from `.env`
+- Create/update `~/.cursor/mcp.json` at the **user level** with your credentials
 
-### Option B: Manual Setup
+**Note:** To update credentials later, edit `.env` and run the setup script again.
+
+### Option B: Manual Setup (Not Recommended)
 
 1. Read your credentials from `.env`:
    ```bash
@@ -73,11 +84,15 @@ The script will:
    # Copy template
    cp ~/.cursor/ai-automation/infrastructure/mcp-config.template.json ~/.cursor/mcp.json
    
-   # Replace placeholders with actual values from .env
+   # Replace ALL placeholders with actual values from .env
    # Edit ~/.cursor/mcp.json and replace:
-   # - ${ATLASSIAN_CLOUD_ID} with your cloud ID
-   # - ${ATLASSIAN_EMAIL} with your email
-   # - ${FIGMA_API_KEY} with your Figma API key
+   # - ${ATLASSIAN_CLOUD_ID} with your cloud ID from .env
+   # - ${ATLASSIAN_EMAIL} with your email from .env
+   # - ${FIGMA_API_KEY} with your Figma API key from .env
+   # - ${SLACK_BOT_TOKEN} with your Slack token from .env
+   # - ${SLACK_CHANNEL_ID} with your channel ID from .env
+   # NEVER hardcode credentials - always use values from .env
+   # Or simply run: node scripts/setup-mcp.js
    ```
 
 The final `~/.cursor/mcp.json` should look like:

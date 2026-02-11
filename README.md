@@ -137,23 +137,37 @@ SLACK_CHANNEL_ID=CXXXXXXXXXX
 
 ### 3. Setup MCP Configuration
 
+**Important: MCP configuration is stored at USER LEVEL** (`~/.cursor/mcp.json`), not in repositories. 
+
+**How credentials work:**
+- The `.env` file is the **source of truth** - store all credentials here
+- The `mcp.json` file is **auto-generated** from `.env` and contains actual values (required by Cursor's MCP)
+- **Never manually edit `mcp.json`** - always edit `.env` and regenerate using the setup script
+- The setup script pulls values from `.env` and generates `mcp.json` with actual values (Cursor requires this)
+
 **Option A: Use the setup script (Recommended)**
 ```bash
 # Run the setup script to merge shared config with your credentials
-./scripts/setup-mcp.sh
+node scripts/setup-mcp.js
 ```
 
 The script will:
-- Read your credentials from `.env` file
-- Merge with the shared MCP config from `infrastructure/mcp-config.template.json`
-- Create `~/.cursor/mcp.json` with your credentials
+- Read **all credentials** from `.env` file (no hardcoded values)
+- Merge with the shared MCP config template from `infrastructure/mcp-config.template.json`
+- Replace all placeholder values (e.g., `${ATLASSIAN_CLOUD_ID}`) with actual values from `.env`
+- Create/update `~/.cursor/mcp.json` at the **user level** with your credentials
 
-**Option B: Manual setup**
+**Option B: Manual setup (Not Recommended)**
 1. Copy `infrastructure/mcp-config.template.json` to `~/.cursor/mcp.json`
 2. Load your `.env` file: `source .env`
-3. Replace `${ATLASSIAN_CLOUD_ID}`, `${ATLASSIAN_EMAIL}`, and `${FIGMA_API_KEY}` with actual values from your `.env` file
+3. Replace **all** placeholder values (`${VAR}`) with actual values from your `.env` file
+4. **Never hardcode credentials** - always use values from `.env`
 
-**Note:** The shared MCP config template is in `infrastructure/mcp-config.template.json` - it uses environment variable placeholders that get replaced with your personal credentials from `.env`.
+**Note:** 
+- The shared MCP config template uses environment variable placeholders (e.g., `${ATLASSIAN_CLOUD_ID}`)
+- The setup script automatically replaces these with actual values from `.env`
+- MCP config is user-level (`~/.cursor/mcp.json`) and shared across all repositories
+- To update credentials, edit `.env` and run the setup script again
 
 ### 4. Connect MCP Servers in Cursor
 
