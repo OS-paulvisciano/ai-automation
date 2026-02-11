@@ -1,0 +1,34 @@
+{
+  "name": "Slack",
+  "type": "mcp-server",
+  "command": "npx",
+  "args": [
+    "-y",
+    "@modelcontextprotocol/server-slack"
+  ],
+  "env": {
+    "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+    "SLACK_CHANNEL_ID": "${SLACK_CHANNEL_ID}"
+  },
+  "description": "Slack integration for reading channel messages and posting notifications",
+  "capabilities": [
+    "read-channel-history",
+    "search-messages",
+    "post-messages",
+    "get-latest-version"
+  ],
+  "setup": {
+    "requiredEnvVars": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID"
+    ],
+    "authentication": "Bot Token (xoxb-...)",
+    "documentation": "https://api.slack.com/",
+    "setupGuide": "See docs/SLACK_MCP_SETUP.md in WidgetLibrary repo"
+  },
+  "useCases": [
+    "Query latest published XIF version from #rd-uicomponents-releases",
+    "Post version publishing notifications",
+    "Automate version bumping workflow"
+  ]
+}

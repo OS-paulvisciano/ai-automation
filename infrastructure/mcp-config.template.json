@@ -22,6 +22,17 @@
         "--figma-api-key=${FIGMA_API_KEY}",
         "--stdio"
       ]
+    },
+    "Slack": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-slack"
+      ],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_CHANNEL_ID": "${SLACK_CHANNEL_ID}"
+      }
     }
   }
 }

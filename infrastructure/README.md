@@ -12,6 +12,7 @@ This directory contains MCP server definitions that can be used to configure you
 - **Figma** (`mcp-servers/figma.json`) - Figma design system integration
 - **GitHub** (`mcp-servers/github.json`) - GitHub API integration (via GitHub CLI)
 - **Browser** (`mcp-servers/browser.json`) - Browser automation for visual verification
+- **Slack** (`mcp-servers/slack.json`) - Slack integration for channel messages and notifications
 
 ## Setup Instructions
 
@@ -21,34 +22,86 @@ This directory contains MCP server definitions that can be used to configure you
 - **GitHub CLI** (`gh`) - For GitHub integration (if using GitHub MCP)
 - **Figma API Key** - Get from [Figma Settings](https://www.figma.com/settings)
 
-### 2. Configure MCP Servers
+### 2. Configure Credentials
 
-Copy the MCP server configurations to your `~/.cursor/mcp.json`:
-
-```bash
-# The mcp-config.json shows the structure
-# Copy relevant servers to your ~/.cursor/mcp.json
-```
-
-### 3. Set Environment Variables
-
-For servers that require credentials, use environment variables:
+**All MCP credentials are stored in the ai-automation framework** so they can be shared across repositories. Create a `.env` file in the ai-automation repo root:
 
 ```bash
-# In your shell profile (~/.zshrc or ~/.bashrc)
-export ATLASSIAN_CLOUD_ID="your-cloud-id"
-export ATLASSIAN_EMAIL="your-email@outsystems.com"
-export FIGMA_API_KEY="your-figma-api-key"
+# Navigate to ai-automation repo
+cd ~/.cursor/ai-automation  # or ~/repos/paul-visciano-ai-automation
+
+# Copy the example file
+cp .env.example .env
+
+# Edit .env with your actual credentials
 ```
 
-Or create a `personal/mcp-credentials.json` (gitignored) with your credentials.
+The `.env` file should contain:
+```bash
+# Atlassian/Jira MCP
+ATLASSIAN_CLOUD_ID=your-cloud-id
+ATLASSIAN_EMAIL=your-email@outsystems.com
 
-### 4. Test Connections
+# Figma MCP
+FIGMA_API_KEY=your-figma-api-key
 
-After setup, test each MCP server:
-- Jira: "Search for my in-progress Jira stories"
-- Figma: "Get Figma file information for file key p8xYRIBjILWM1zG6AJtkAb"
-- Browser: "Navigate to https://example.com"
+# Slack MCP
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_CHANNEL_ID=CXXXXXXXXXX
+```
+
+**Important:** The `.env` file is gitignored and stored in the ai-automation repo, not in individual repositories. This allows credentials to be shared across all repos that use the framework via symlinks.
+
+### 3. Setup MCP Configuration
+
+Run the setup script to merge the shared MCP config template with your credentials:
+
+```bash
+cd ~/.cursor/ai-automation
+./scripts/setup-mcp.sh
+```
+
+This will:
+- Read your credentials from `.env` file
+- Merge with the shared MCP config from `infrastructure/mcp-config.template.json`
+- Create `~/.cursor/mcp.json` with your credentials
+
+### 4. Verify Setup
+
+After running the setup script, verify your `.env` file contains all required credentials and `~/.cursor/mcp.json` was created successfully.
+
+### 5. Connect MCP Servers in Cursor
+
+After creating `~/.cursor/mcp.json`:
+
+1. **Restart Cursor** completely (quit and reopen the application)
+2. **Open Settings** → **Tools & MCP**
+3. **Verify MCP servers appear** in the "Installed MCP Servers" section:
+   - **Atlassian** - Will show "Needs authentication" with a "Connect" button
+   - **browsermcp** - Should show "X tools enabled" with toggle switch
+   - **Framelink MCP for Figma** - Should show "X tools enabled" with toggle switch
+   - **Slack** - Should show "X tools enabled" with toggle switch (if credentials are set)
+
+4. **Connect Atlassian MCP** (OAuth authentication):
+   - Click the **"Connect"** button next to Atlassian
+   - This opens a browser window for OAuth authentication
+   - Sign in with your Atlassian account (use the email configured in `mcp.json`)
+   - Authorize the connection
+   - Return to Cursor - the status should change to "Connected" with tools enabled
+
+**Note:** If MCP servers don't appear after restarting:
+- Verify `~/.cursor/mcp.json` exists and contains valid JSON
+- Check that the `mcpServers` object is populated (not empty)
+- Ensure credentials in the config match your `.env` file
+- Try restarting Cursor again
+
+### 6. Test Connections
+
+After connecting, test each MCP server:
+- **Jira**: "Search for my in-progress Jira stories"
+- **Figma**: "Get Figma file information for file key p8xYRIBjILWM1zG6AJtkAb"
+- **Browser**: "Navigate to https://example.com"
+- **Slack**: "Query the latest published XIF version from #rd-uicomponents-releases"
 
 ## Configuration Files
 
@@ -72,9 +125,17 @@ After setup, test each MCP server:
 
 ### Authentication Issues
 
-- **Jira**: Verify cloud ID and email are correct
+- **Jira/Atlassian**: 
+  - Verify cloud ID and email are correct in `~/.cursor/mcp.json`
+  - Click "Connect" button in Cursor Settings → Tools & MCP
+  - Complete OAuth flow in browser
+  - If connection fails, verify your Atlassian account has access to the cloud instance
 - **Figma**: Ensure API key has `file_content:read` permission
 - **GitHub**: Run `gh auth login` to authenticate GitHub CLI
+- **Slack**: 
+  - Verify bot token starts with `xoxb-` and is valid
+  - Check that bot is added to the channel (`#rd-uicomponents-releases`)
+  - Verify `channels:history` scope is enabled in Slack app settings
 
 ### Browser MCP Flakiness
 

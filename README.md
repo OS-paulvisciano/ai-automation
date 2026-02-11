@@ -38,14 +38,53 @@ ln -s ~/repos/ai-automation ~/.cursor/ai-automation
 
 **Why symlink?** This keeps your repos organized while allowing Cursor to access the framework at the expected location. Changes in either location are the same (they point to the same files).
 
-### 4. Setup Repo-Specific Access (Optional)
+### 5. Setup Repo-Specific Access (For Each Repository)
 
-For individual repositories, you can create a symlink to access the framework:
+For each repository you work on, integrate the automation framework:
 
 ```bash
-# In your repo root (e.g., runtime-mobile-widgets-js)
+# Navigate to your repository
+cd ~/repos/your-repo-name
+
+# Create .cursor directory
 mkdir -p .cursor
+
+# Create symlink to shared automation framework
 ln -s ~/.cursor/ai-automation .cursor/ai-automation
+
+# Create README explaining the setup (optional but recommended)
+cat > .cursor/README.md << 'EOF'
+# Repo-Specific Cursor Configuration
+
+This directory contains repository-specific AI automation configurations and plans.
+
+## Structure
+
+- **`ai-automation/`** - Symlink to shared AI automation framework (`~/.cursor/ai-automation`)
+- **`plans/`** - Repository-specific automation plans (e.g., story-specific workflows)
+- Other repo-specific configurations as needed
+
+## How It Works
+
+The `ai-automation/` folder is a symlink to the shared framework, which provides:
+- Org-level skills and agents
+- Shared MCP server configurations
+- Team and project configurations
+
+This repo can have its own customizations:
+- `plans/` - Specific automation plans for this repo
+- Custom skills/agents if needed (would override shared ones)
+- Repo-specific configurations
+
+## Priority Order
+
+When AI looks for skills/agents, it checks in this order:
+1. `~/.cursor/ai-automation/personal/` - Personal overrides (highest priority)
+2. `.cursor/` (this folder) - Repo-specific overrides
+3. `~/.cursor/ai-automation/projects/{project}/` - Project config
+4. `~/.cursor/ai-automation/teams/{team}/` - Team config
+5. `~/.cursor/ai-automation/skills/`, `agents/` - Org defaults (lowest priority)
+EOF
 ```
 
 This allows:
@@ -53,11 +92,27 @@ This allows:
 - Repo-specific items in `.cursor/` (e.g., `plans/`, custom skills/agents)
 - Clear separation between shared and repo-specific configurations
 
+**Verification:**
+After setup, verify the integration works:
+```bash
+# Check symlink exists
+ls -la .cursor/ai-automation
+
+# Verify you can access skills
+ls .cursor/ai-automation/skills/
+
+# Verify you can access project configs
+ls .cursor/ai-automation/projects/
+```
+
 ### 2. Configure Personal Settings
 
-Create a `.env` file with your API keys (this file is gitignored):
+**All MCP credentials are stored in the ai-automation framework** so they can be shared across repositories. Create a `.env` file in the ai-automation repo root with your API keys (this file is gitignored):
 
 ```bash
+# Navigate to ai-automation repo
+cd ~/.cursor/ai-automation  # or ~/repos/paul-visciano-ai-automation
+
 # Copy the example file
 cp .env.example .env
 
@@ -66,10 +121,19 @@ cp .env.example .env
 
 The `.env` file should contain:
 ```bash
+# Atlassian/Jira MCP
 ATLASSIAN_CLOUD_ID=your-cloud-id
 ATLASSIAN_EMAIL=your-email@outsystems.com
+
+# Figma MCP
 FIGMA_API_KEY=your-figma-api-key
+
+# Slack MCP
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_CHANNEL_ID=CXXXXXXXXXX
 ```
+
+**Important:** The `.env` file is gitignored and stored in the ai-automation repo, not in individual repositories. This allows credentials to be shared across all repos that use the framework via symlinks.
 
 ### 3. Setup MCP Configuration
 
@@ -90,6 +154,26 @@ The script will:
 3. Replace `${ATLASSIAN_CLOUD_ID}`, `${ATLASSIAN_EMAIL}`, and `${FIGMA_API_KEY}` with actual values from your `.env` file
 
 **Note:** The shared MCP config template is in `infrastructure/mcp-config.template.json` - it uses environment variable placeholders that get replaced with your personal credentials from `.env`.
+
+### 4. Connect MCP Servers in Cursor
+
+After creating `~/.cursor/mcp.json`, you need to:
+
+1. **Restart Cursor** completely (quit and reopen)
+2. **Open Settings** → **Tools & MCP**
+3. **Verify MCP servers appear** in the "Installed MCP Servers" section:
+   - **Atlassian** - Shows "Needs authentication" with a "Connect" button
+   - **browsermcp** - Should show "X tools enabled" with toggle on
+   - **Framelink MCP for Figma** - Should show "X tools enabled" with toggle on
+
+4. **Connect Atlassian MCP**:
+   - Click the **"Connect"** button next to Atlassian
+   - This will open a browser window for OAuth authentication
+   - Sign in with your Atlassian account
+   - Authorize the connection
+   - The status should change to "Connected" with tools enabled
+
+**Note:** If MCP servers don't appear after restarting, verify that `~/.cursor/mcp.json` exists and contains valid JSON with the `mcpServers` object populated.
 
 ## Usage
 
@@ -200,7 +284,9 @@ These are never committed and take highest priority.
 
 ## Documentation
 
-- [Infrastructure Setup](./infrastructure/README.md) - MCP server configuration
+- **[Complete Setup Guide](./docs/COMPLETE_SETUP_GUIDE.md)** - Step-by-step setup instructions (start here!)
+- [Infrastructure Setup](./infrastructure/README.md) - MCP server configuration details
+- [Automation Setup](./docs/AUTOMATION_SETUP.md) - Overview of automation workflows
 - [Skills Guide](./skills/README.md) - Available skills and how to use them
 - [Agents Guide](./agents/README.md) - Available workflows
 - [Team Customization](./teams/README.md) - How to customize for your team
