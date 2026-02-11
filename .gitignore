@@ -15,6 +15,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Environment files
+# Environment files (credentials)
 .env
 .env.local
+.env.*.local
