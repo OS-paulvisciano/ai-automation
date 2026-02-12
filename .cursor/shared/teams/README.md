@@ -9,7 +9,7 @@ Teams can override org-level skills and agents to customize workflows for their 
 ## Structure
 
 ```
-teams/
+.cursor/shared/teams/
 ├── {team-name}/
 │   ├── skills/          # Team-specific skill overrides
 │   ├── agents/          # Team-specific agent overrides
@@ -28,7 +28,7 @@ teams/
 
 ## Adding Team Overrides
 
-1. Create `teams/{team-name}/` directory
+1. Create `.cursor/shared/teams/{team-name}/` directory
 2. Create override files:
    - `skills/{skill-name}.md` - Override specific skill
    - `agents/{agent-name}.md` - Override specific agent

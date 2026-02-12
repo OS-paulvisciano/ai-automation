@@ -5,7 +5,7 @@
  * 
  * This script:
  * 1. Clones or uses existing project repository
- * 2. Symlinks the automation repo into .cursor/ai-automation
+ * 2. Symlinks the automation repo into .cursor/shared
  * 3. Runs project-specific setup steps (npm auth, etc.)
  * 
  * Usage:
@@ -185,7 +185,8 @@ async function cloneRepository(projectConfig, targetPath, force = false) {
 
 function symlinkAutomation(repoPath) {
     const cursorDir = path.join(repoPath, '.cursor');
-    const automationLink = path.join(cursorDir, 'ai-automation');
+    const sharedLink = path.join(cursorDir, 'shared');
+    const sharedDir = path.join(AUTOMATION_ROOT, '.cursor', 'shared');
 
     // Create .cursor directory if it doesn't exist
     if (!fs.existsSync(cursorDir)) {
@@ -194,18 +195,18 @@ function symlinkAutomation(repoPath) {
     }
 
     // Remove existing symlink or directory if it exists
-    if (fs.existsSync(automationLink)) {
-        if (fs.lstatSync(automationLink).isSymbolicLink()) {
-            fs.unlinkSync(automationLink);
+    if (fs.existsSync(sharedLink)) {
+        if (fs.lstatSync(sharedLink).isSymbolicLink()) {
+            fs.unlinkSync(sharedLink);
         } else {
-            throw new Error(`${automationLink} exists but is not a symlink. Please remove it manually.`);
+            throw new Error(`${sharedLink} exists but is not a symlink. Please remove it manually.`);
         }
     }
 
-    // Create symlink
-    const relativePath = path.relative(cursorDir, AUTOMATION_ROOT);
-    fs.symlinkSync(relativePath, automationLink, 'dir');
-    console.log(`✓ Symlinked automation repo: ${automationLink} -> ${AUTOMATION_ROOT}`);
+    // Create symlink to .cursor/shared
+    const relativePath = path.relative(cursorDir, sharedDir);
+    fs.symlinkSync(relativePath, sharedLink, 'dir');
+    console.log(`✓ Symlinked automation framework: ${sharedLink} -> ${sharedDir}`);
 }
 
 async function setupNpmAuth(projectConfig, repoPath) {
@@ -428,7 +429,7 @@ async function main() {
         console.log('\nNext steps:');
         console.log('1. Navigate to the repository');
         console.log('2. Follow the setup instructions in the repository README');
-        console.log('3. The automation framework is symlinked at .cursor/ai-automation\n');
+        console.log('3. The automation framework is symlinked at .cursor/shared\n');
 
     } catch (error) {
         console.error('\n✗ Error:', error.message);

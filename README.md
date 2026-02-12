@@ -8,12 +8,17 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 
 ## Structure
 
+**Shared Framework (symlinked to individual repos):**
+- **`.cursor/shared/skills/`** - Reusable task rules and guidelines (PR creation, Jira updates, etc.)
+- **`.cursor/shared/agents/`** - Workflow definitions that combine multiple skills
+- **`.cursor/shared/teams/`** - Team-specific overrides and customizations
+
+**Automation Repo Only:**
 - **`infrastructure/`** - MCP server configurations and setup
-- **`skills/`** - Reusable task rules and guidelines (PR creation, Jira updates, etc.)
-- **`agents/`** - Workflow definitions that combine multiple skills
-- **`teams/`** - Team-specific overrides and customizations
-- **`projects/`** - Project-specific configurations
-- **`personal/`** - Personal overrides (gitignored, for local customization)
+- **`projects/`** - Project-specific configurations (used by setup scripts)
+- **`scripts/`** - Setup and utility scripts
+- **`docs/`** - Documentation
+- **`.cursor/plans/`** - Automation repo's own plans
 
 ## Getting Started
 
@@ -128,7 +133,7 @@ After creating `~/.cursor/mcp.json`, you need to:
 
 Now that the automation framework is configured, use it to set up your project repositories. The setup script will:
 - Clone the project repository (or use existing if present)
-- Create symlink to automation framework in `.cursor/ai-automation`
+- Create symlink to automation framework in `.cursor/shared`
 - Configure project-specific settings (npm authentication, etc.)
 
 **Available Projects:**
@@ -146,7 +151,7 @@ node scripts/setup-project.js widget-library
 
 The script will:
 1. Clone `OutSystems/OutSystems.WidgetLibrary` to `~/repos/OutSystems.WidgetLibrary` (or use existing)
-2. Create `.cursor/ai-automation` symlink pointing to the automation framework
+2. Create `.cursor/shared` symlink pointing to `.cursor/shared` in the automation framework
 3. Prompt for Azure DevOps PAT if missing (saves to `.env` file)
 4. Configure npm authentication
 5. Set up `.npmrc` files
@@ -182,26 +187,22 @@ The framework uses a **priority-based override system** that allows customizatio
 
 ```
 Priority (Highest → Lowest):
-1. personal/              # Your personal overrides (gitignored)
-2. .cursor/ (in repo)     # Repo-specific overrides (if .cursor/ai-automation symlink exists)
-3. projects/{project}/     # Project-specific configs
-4. teams/{team}/          # Team-specific overrides
-5. skills/, agents/       # Org-level defaults (shared)
+1. .cursor/ (in repo)                    # Repo-specific overrides (if .cursor/shared symlink exists)
+2. .cursor/shared/teams/{team}/           # Team-specific overrides
+3. .cursor/shared/skills/, .cursor/shared/agents/  # Org-level defaults (shared)
 ```
 
 **How it works:**
-- **Shared defaults** (`skills/`, `agents/`) provide org-wide standards
-- **Team overrides** (`teams/{team}/`) customize for specific teams
-- **Project overrides** (`projects/{project}/`) customize for specific projects
-- **Personal overrides** (`personal/`) are your local customizations (never committed)
+- **Shared defaults** (`.cursor/shared/skills/`, `.cursor/shared/agents/`) provide org-wide standards
+- **Team overrides** (`.cursor/shared/teams/{team}/`) customize for specific teams
+- **Repo-specific overrides** (`.cursor/` in individual repos) allow per-repo customizations
+- **Project configs** (`projects/{project}/config.json` in automation repo) are used by setup scripts, not directly by individual repos
 
 **Example:**
-If you're working on `runtime-mobile-widgets` project with `.cursor/ai-automation/` symlink:
-1. AI looks for `personal/skills/pr-creation.md` (if exists, use it)
-2. Else looks for `.cursor/skills/pr-creation.md` in repo (if exists, use it)
-3. Else looks for `projects/runtime-mobile-widgets/skills/pr-creation.md` (if exists, use it)
-4. Else looks for `teams/ui-components/skills/pr-creation.md` (if exists, use it)
-5. Else uses `skills/pr-creation.md` (org default)
+If you're working on `runtime-mobile-widgets` project with `.cursor/shared/` symlink:
+1. AI looks for `.cursor/skills/pr-creation.md` in repo (if exists, use it)
+2. Else looks for `.cursor/shared/teams/ui-components/skills/pr-creation.md` (if exists, use it)
+3. Else uses `.cursor/shared/skills/pr-creation.md` (org default)
 
 This allows teams to customize workflows while maintaining consistency across the organization.
 
@@ -209,17 +210,17 @@ This allows teams to customize workflows while maintaining consistency across th
 
 ### Adding New Skills
 
-1. Create `skills/{skill-name}.md`
+1. Create `.cursor/shared/skills/{skill-name}.md`
 2. Follow the skill template (see existing skills)
-3. Update `skills/README.md`
+3. Update `.cursor/shared/skills/README.md`
 4. Document dependencies and required MCPs
 
 ### Adding New Agents
 
-1. Create `agents/{agent-name}.md`
+1. Create `.cursor/shared/agents/{agent-name}.md`
 2. Define workflow steps
 3. List required skills
-4. Update `agents/README.md`
+4. Update `.cursor/shared/agents/README.md`
 
 ### Team Customizations
 
@@ -231,8 +232,8 @@ Teams can override org-level skills/agents by creating:
 **Example:** UI Components team might override PR creation to add team-specific requirements:
 ```bash
 # Create team override
-mkdir -p teams/ui-components/skills
-cp skills/pr-creation.md teams/ui-components/skills/pr-creation.md
+mkdir -p .cursor/shared/teams/ui-components/skills
+cp .cursor/shared/skills/pr-creation.md .cursor/shared/teams/ui-components/skills/pr-creation.md
 # Edit to add team-specific rules
 ```
 
@@ -248,10 +249,10 @@ Projects can have specific configurations and overrides:
 ### Repo-Specific Customizations
 
 In individual repositories, create `.cursor/` folder with:
-- `ai-automation/` - Symlink to `~/.cursor/ai-automation` (shared framework)
+- `shared/` - Symlink to `~/repos/ai-automation/.cursor/shared` (shared framework)
 - `plans/` - Repo-specific automation plans
-- `skills/` - Repo-specific skill overrides
-- `agents/` - Repo-specific agent overrides
+- `skills/` - Repo-specific skill overrides (optional)
+- `agents/` - Repo-specific agent overrides (optional)
 
 **Example:**
 ```bash
@@ -262,21 +263,20 @@ mkdir -p .cursor/plans
 
 ### Personal Customizations
 
-Create personal overrides in `personal/` (gitignored):
-- `personal/.env` - Your API keys and credentials
-- `personal/skills/{skill-name}.md` - Personal skill customizations
-- `personal/agents/{agent-name}.md` - Personal workflow preferences
+Personal overrides can be created in individual repos' `.cursor/` folders (gitignored):
+- `.cursor/skills/{skill-name}.md` - Personal skill customizations (repo-specific)
+- `.cursor/agents/{agent-name}.md` - Personal workflow preferences (repo-specific)
 
-These are never committed and take highest priority.
+These are never committed and take highest priority in that repo.
 
 ## Documentation
 
 - **[Complete Setup Guide](./docs/COMPLETE_SETUP_GUIDE.md)** - Step-by-step setup instructions (start here!)
 - [Infrastructure Setup](./infrastructure/README.md) - MCP server configuration details
 - [Automation Setup](./docs/AUTOMATION_SETUP.md) - Overview of automation workflows
-- [Skills Guide](./skills/README.md) - Available skills and how to use them
-- [Agents Guide](./agents/README.md) - Available workflows
-- [Team Customization](./teams/README.md) - How to customize for your team
+- [Skills Guide](./.cursor/shared/skills/README.md) - Available skills and how to use them
+- [Agents Guide](./.cursor/shared/agents/README.md) - Available workflows
+- [Team Customization](./.cursor/shared/teams/README.md) - How to customize for your team
 - [TODO](./TODO.md) - Future enhancements and improvements
 
 ## License

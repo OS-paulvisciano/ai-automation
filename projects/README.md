@@ -4,7 +4,7 @@ Project-specific configurations and overrides.
 
 ## Purpose
 
-Projects can have specific configurations (Figma file keys, Jira projects, etc.) and can override skills/agents for project-specific needs.
+Projects can have specific configurations (Figma file keys, Jira projects, etc.). **Note:** The `projects/` folder is automation-repo-only and is used by setup scripts. Individual repos access the shared framework via `.cursor/shared` symlink, which does not include project overrides.
 
 ## Structure
 
@@ -31,7 +31,7 @@ node scripts/setup-project.js <project-name>
 
 The setup script will:
 1. Clone the project repository (or use existing if present)
-2. Symlink the automation repo into `.cursor/ai-automation`
+2. Symlink the automation framework into `.cursor/shared`
 3. Run project-specific setup steps (npm authentication, etc.)
 
 **Example:**
@@ -41,7 +41,7 @@ node scripts/setup-project.js widget-library
 
 This will:
 - Clone `OutSystems/OutSystems.WidgetLibrary` to `~/repos/OutSystems.WidgetLibrary`
-- Create `.cursor/ai-automation` symlink
+- Create `.cursor/shared` symlink pointing to `~/repos/ai-automation/.cursor/shared`
 - Set up npm authentication using `AZURE_DEVOPS_PAT` from `.env`
 - Configure `.npmrc` files
 
@@ -79,7 +79,7 @@ node scripts/setup-project.js widget-library
 
 This automates:
 - ✅ Clone the repository (or use existing)
-- ✅ Setup symlink to automation framework (`.cursor/ai-automation`)
+- ✅ Setup symlink to automation framework (`.cursor/shared`)
 - ✅ Setup npm authentication (prompts for Azure DevOps PAT if missing)
 - ✅ Configure `.npmrc` files
 

@@ -36,7 +36,7 @@ Each skill document includes:
 
 ## Adding New Skills
 
-1. Create `skills/{skill-name}.md`
+1. Create `.cursor/shared/skills/{skill-name}.md`
 2. Follow the skill template (see existing skills)
 3. Update this README
 4. Document dependencies and required MCPs
@@ -50,8 +50,9 @@ Some skills depend on others:
 
 ## Team/Project Overrides
 
-Teams and projects can override org-level skills:
-- `teams/{team}/skills/{skill-name}.md` - Team override
-- `projects/{project}/skills/{skill-name}.md` - Project override
+Teams can override org-level skills:
+- `.cursor/shared/teams/{team}/skills/{skill-name}.md` - Team override
+
+**Note:** Project overrides are not accessible via symlink (projects folder is automation-repo-only).
 
 Overrides inherit from base skill and only need to specify differences.

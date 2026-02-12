@@ -6,23 +6,23 @@ Thank you for contributing to the AI Automation Framework!
 
 ### Adding New Skills
 
-1. Create `skills/{skill-name}.md`
+1. Create `.cursor/shared/skills/{skill-name}.md`
 2. Follow the structure of existing skills:
    - Metadata (ID, version, dependencies, MCPs)
    - Rules and conventions
    - Validation criteria
    - Examples
    - AI instructions
-3. Update `skills/README.md`
+3. Update `.cursor/shared/skills/README.md`
 4. Submit a pull request
 
 ### Adding New Agents
 
-1. Create `agents/{agent-name}.md`
+1. Create `.cursor/shared/agents/{agent-name}.md`
 2. Define workflow steps
 3. List required skills
 4. Document configuration options
-5. Update `agents/README.md`
+5. Update `.cursor/shared/agents/README.md`
 6. Submit a pull request
 
 ### Adding MCP Servers

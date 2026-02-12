@@ -10,19 +10,13 @@ paul-visciano-ai-automation/
 ├── infrastructure/          # MCP server configurations
 │   ├── mcp-servers/        # Individual MCP server definitions
 │   └── README.md
-├── skills/                  # Reusable task rules
-│   ├── pr-creation.md
-│   ├── jira-updates.md
-│   ├── branch-naming.md
-│   ├── design-verification.md
-│   └── README.md
-├── agents/                  # Workflow definitions
-│   ├── story-completion.md
-│   ├── design-verification.md
-│   ├── pr-creation.md
-│   └── README.md
-├── teams/                   # Team-specific overrides
-│   └── ui-components/
+├── .cursor/
+│   └── shared/              # Shared framework (symlinked to repos)
+│       ├── skills/           # Reusable task rules
+│       ├── agents/           # Workflow definitions
+│       └── teams/            # Team-specific overrides
+├── infrastructure/          # MCP server configurations
+├── projects/                # Project-specific configs
 ├── projects/                # Project-specific configs
 │   └── runtime-mobile-widgets/
 ├── docs/                    # Documentation
@@ -72,10 +66,7 @@ Once published, team members can:
 
 ```bash
 # Clone the repository
-git clone https://github.com/paul-visciano/paul-visciano-ai-automation.git ~/.cursor/ai-automation
-
-# Or symlink if preferred
-ln -s ~/repos/paul-visciano-ai-automation ~/.cursor/ai-automation
+git clone https://github.com/paul-visciano/paul-visciano-ai-automation.git ~/repos/ai-automation
 ```
 
 ### 4. Team Setup

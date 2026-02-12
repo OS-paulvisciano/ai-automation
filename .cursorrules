@@ -4,22 +4,22 @@ This repository contains shared AI automation rules, skills, and workflows for O
 
 ## Framework Structure
 
-- **`skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification)
-- **`agents/`** - Workflow definitions that combine multiple skills
-- **`infrastructure/`** - MCP server configurations
-- **`projects/`** - Project-specific configurations
-- **`teams/`** - Team-specific overrides
+- **`.cursor/shared/skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification)
+- **`.cursor/shared/agents/`** - Workflow definitions that combine multiple skills
+- **`.cursor/shared/teams/`** - Team-specific overrides
+- **`infrastructure/`** - MCP server configurations (automation repo only)
+- **`projects/`** - Project-specific configurations (automation repo only)
 
 ## Using Skills and Agents
 
 When the user requests automation tasks, use natural language and automatically identify which skills/agents to use from this framework.
 
 **Natural Language Examples:**
-- "Create a PR" → Use `skills/pr-creation.md` rules
-- "Update the Jira story" → Use `skills/jira-updates.md` rules
-- "Create a branch" → Use `skills/branch-naming.md` rules
-- "Check if this matches Figma" → Use `skills/design-verification.md` rules
-- "Complete this story" → Use `agents/story-completion.md` workflow
+- "Create a PR" → Use `.cursor/shared/skills/pr-creation.md` rules
+- "Update the Jira story" → Use `.cursor/shared/skills/jira-updates.md` rules
+- "Create a branch" → Use `.cursor/shared/skills/branch-naming.md` rules
+- "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification.md` rules
+- "Complete this story" → Use `.cursor/shared/agents/story-completion.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
 
@@ -27,11 +27,9 @@ When the user requests automation tasks, use natural language and automatically 
 
 When resolving which rules to use, follow this priority order:
 
-1. `personal/` - Personal overrides (highest priority, gitignored)
-2. `.cursor/` (in user's repo) - Repo-specific overrides
-3. `projects/{project}/` - Project-specific configs
-4. `teams/{team}/` - Team-specific overrides
-5. `skills/`, `agents/` - Org-level defaults (lowest priority, this repo)
+1. `.cursor/` (in user's repo) - Repo-specific overrides (highest priority)
+2. `.cursor/shared/teams/{team}/` - Team-specific overrides
+3. `.cursor/shared/skills/`, `.cursor/shared/agents/` - Org-level defaults (lowest priority)
 
 ## Key Rules
 
@@ -81,21 +79,21 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 - **Never commit credentials** - All credentials are in `.env` files (gitignored)
 - **Always validate** - Check that PR titles, branch names, etc. follow conventions
 - **Use natural language** - Infer which skill/agent to use from the user's request (no need for explicit prefixes)
-- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file and follow its rules
-- **Use project configs** - Check `projects/{project}/config.json` for project-specific settings (Figma file keys, Jira projects, etc.)
+- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/shared/skills/` or `.cursor/shared/agents/` and follow its rules
+- **Use project configs** - Check `projects/{project}/config.json` in the automation repo for project-specific settings (Figma file keys, Jira projects, etc.)
 
 ## Examples
 
 **User**: "Create a PR for my changes"
-**AI**: Read `skills/pr-creation.md` and follow those rules to create PR with proper title format, labels, and template sections.
+**AI**: Read `.cursor/shared/skills/pr-creation.md` and follow those rules to create PR with proper title format, labels, and template sections.
 
 **User**: "Update the Jira story with what I did"
-**AI**: Read `skills/jira-updates.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
+**AI**: Read `.cursor/shared/skills/jira-updates.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
 
 **User**: "Complete story ROU-12345"
-**AI**: Read `agents/story-completion.md` and follow that workflow to handle branch creation, implementation verification, Jira updates, and PR creation.
+**AI**: Read `.cursor/shared/agents/story-completion.md` and follow that workflow to handle branch creation, implementation verification, Jira updates, and PR creation.
 
 **User**: "Check if my component matches Figma"
-**AI**: Read `skills/design-verification.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
+**AI**: Read `.cursor/shared/skills/design-verification.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
 
 **Note**: The AI should automatically identify which skill/agent to use from natural language. No need for explicit prefixes unless the user uses them.

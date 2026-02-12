@@ -34,7 +34,7 @@ Each agent document includes:
 
 ## Adding New Agents
 
-1. Create `agents/{agent-name}.md`
+1. Create `.cursor/shared/agents/{agent-name}.md`
 2. Define workflow steps
 3. List required skills
 4. Document configuration options
@@ -48,8 +48,9 @@ Agents depend on skills:
 
 ## Team/Project Overrides
 
-Teams and projects can override org-level agents:
-- `teams/{team}/agents/{agent-name}.md` - Team override
-- `projects/{project}/agents/{agent-name}.md` - Project override
+Teams can override org-level agents:
+- `.cursor/shared/teams/{team}/agents/{agent-name}.md` - Team override
+
+**Note:** Project overrides are not accessible via symlink (projects folder is automation-repo-only).
 
 Overrides inherit from base agent and only need to specify differences.

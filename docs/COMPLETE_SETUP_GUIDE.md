@@ -163,7 +163,7 @@ cd /Users/paul.visciano/repos/your-repo-name
 mkdir -p .cursor
 
 # Create symlink to shared automation framework
-ln -s ~/.cursor/ai-automation .cursor/ai-automation
+ln -s ~/repos/ai-automation/.cursor/shared .cursor/shared
 
 # Create README explaining the setup (optional but recommended)
 cat > .cursor/README.md << 'EOF'
@@ -173,16 +173,15 @@ This directory contains repository-specific AI automation configurations and pla
 
 ## Structure
 
-- **`ai-automation/`** - Symlink to shared AI automation framework (`~/.cursor/ai-automation`)
+- **`shared/`** - Symlink to shared AI automation framework (`~/repos/ai-automation/.cursor/shared`)
 - **`plans/`** - Repository-specific automation plans (e.g., story-specific workflows)
 - Other repo-specific configurations as needed
 
 ## How It Works
 
-The `ai-automation/` folder is a symlink to the shared framework, which provides:
+The `shared/` folder is a symlink to the shared framework, which provides:
 - Org-level skills and agents
-- Shared MCP server configurations
-- Team and project configurations
+- Team-specific overrides
 
 This repo can have its own customizations:
 - `plans/` - Specific automation plans for this repo
@@ -192,11 +191,9 @@ This repo can have its own customizations:
 ## Priority Order
 
 When AI looks for skills/agents, it checks in this order:
-1. `~/.cursor/ai-automation/personal/` - Personal overrides (highest priority)
-2. `.cursor/` (this folder) - Repo-specific overrides
-3. `~/.cursor/ai-automation/projects/{project}/` - Project config
-4. `~/.cursor/ai-automation/teams/{team}/` - Team config
-5. `~/.cursor/ai-automation/skills/`, `agents/` - Org defaults (lowest priority)
+1. `.cursor/` (this folder) - Repo-specific overrides (highest priority)
+2. `.cursor/shared/teams/{team}/` - Team config
+3. `.cursor/shared/skills/`, `.cursor/shared/agents/` - Org defaults (lowest priority)
 EOF
 ```
 
@@ -206,16 +203,16 @@ Verify the integration works:
 
 ```bash
 # Check symlink exists
-ls -la .cursor/ai-automation
+ls -la .cursor/shared
 
 # Verify you can access skills
-ls .cursor/ai-automation/skills/
+ls .cursor/shared/skills/
 
 # Verify you can access agents
-ls .cursor/ai-automation/agents/
+ls .cursor/shared/agents/
 
-# Verify you can access project configs
-ls .cursor/ai-automation/projects/
+# Verify you can access teams
+ls .cursor/shared/teams/
 ```
 
 ## Step 7: Test MCP Connections
@@ -236,7 +233,7 @@ Test each MCP server to ensure they're working:
 
 ## Complete Setup Checklist
 
-- [ ] Automation framework cloned to `~/.cursor/ai-automation`
+- [ ] Automation framework cloned to `~/repos/ai-automation`
 - [ ] `.env` file created with credentials
 - [ ] `~/.cursor/mcp.json` created with MCP server configurations
 - [ ] Cursor restarted
@@ -244,7 +241,7 @@ Test each MCP server to ensure they're working:
 - [ ] Atlassian MCP connected (OAuth completed)
 - [ ] browsermcp enabled (toggle ON)
 - [ ] Figma MCP enabled (toggle ON)
-- [ ] Repository integrated (`.cursor/ai-automation` symlink created)
+- [ ] Repository integrated (`.cursor/shared` symlink created)
 - [ ] All MCP servers tested and working
 
 ## What's Next?
@@ -256,7 +253,7 @@ Now that everything is set up, you can:
 - Use all automation skills and agents from the shared framework
 - Customize workflows at personal, repo, project, or team levels
 
-See the main [README.md](../README.md) for usage examples and the [Skills Guide](../skills/README.md) for available automation capabilities.
+See the main [README.md](../README.md) for usage examples and the [Skills Guide](../.cursor/shared/skills/README.md) for available automation capabilities.
 
 ## Troubleshooting
 
@@ -272,13 +269,13 @@ See the main [README.md](../README.md) for usage examples and the [Skills Guide]
 - Check Cursor logs for error messages
 
 ### Framework Not Accessible in Repository
-- Verify symlink exists: `ls -la .cursor/ai-automation`
-- Check symlink points to correct location: `readlink .cursor/ai-automation`
-- Ensure `~/.cursor/ai-automation` directory exists
+- Verify symlink exists: `ls -la .cursor/shared`
+- Check symlink points to correct location: `readlink .cursor/shared`
+- Ensure `~/repos/ai-automation/.cursor/shared` directory exists
 
 ## Support
 
 For issues or questions:
 - Check the [Infrastructure README](../infrastructure/README.md) for MCP-specific help
-- Review the [Skills Guide](../skills/README.md) for automation capabilities
+- Review the [Skills Guide](../.cursor/shared/skills/README.md) for automation capabilities
 - See [AUTOMATION_SETUP.md](./AUTOMATION_SETUP.md) for workflow examples
