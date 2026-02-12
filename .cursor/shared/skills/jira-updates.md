@@ -65,8 +65,8 @@
 - Questions for reviewers
 - Links to related PRs or discussions
 - **ODC App URLs** (if applicable): Add as a comment when an ODC app is created for testing
-  - Format: `ODC App: https://eng-starter-apps-dev.outsystems.app/{app-name}/Home`
-  - Example: `ODC App: https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home`
+  - Format: `ODC App: [URL](URL)` (use markdown link format for clickable link)
+  - Example: `ODC App: [https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home](https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home)`
 
 **Comment Format**:
 - Be concise but informative
@@ -130,7 +130,8 @@ When updating Jira, the AI MUST:
 5. Update "Release Note" custom field (`customfield_12701`) with user-focused description (see `skill:release-notes`)
 6. Add comment if significant decisions were made or if ODC App URL is available
    - **ODC App URLs MUST be added as comments, NOT in the "What I Did" section**
-   - Format: `ODC App: https://eng-starter-apps-dev.outsystems.app/{app-name}/Home`
+   - Format: `ODC App: [URL](URL)` (use markdown link format for clickable link)
+   - Example: `ODC App: [https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home](https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home)`
 7. Use clear, professional language
 8. Include relevant links (PR, Figma, etc.)
 
