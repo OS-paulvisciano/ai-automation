@@ -15,10 +15,14 @@
 - `<subject>` - Short, concise description (usually the Jira issue summary)
 - **MUST** include colon (`:`) after Jira issue
 - **MUST** match exactly: `ROU-XXXX: Description here`
+- **MUST** remove component prefixes like `[MobileUI]`, `[ComponentName]`, etc. from Jira summary
 
 **Examples**:
 - ✅ `ROU-12461: Add pressed state for Card dismiss button`
 - ✅ `ROU-12345: Fix dropdown positioning issue`
+- ✅ `ROU-12451: Implement behaviour to pause the carousel when a slide is pressed` (removed `[MobileUI]` prefix)
+- ❌ `ROU-12451: [MobileUI] Implement behaviour to pause the carousel` (has component prefix)
+- ❌ `ROU-12461: [Component] Add pressed state` (has component prefix)
 - ❌ `ROU-12461 Add pressed state` (missing colon)
 - ❌ `#ROU-12461: Add pressed state` (has # prefix)
 - ❌ `Add pressed state` (missing Jira issue)
@@ -99,13 +103,14 @@ Before creating PR, verify:
 When creating a PR, the AI MUST:
 1. Extract Jira issue ID from branch name or context
 2. Get Jira issue summary for PR title subject
-3. Format title as: `<jira-issue>: <subject>`
-4. Include colon after Jira issue
-5. Fill Context section with why change is needed
-6. Fill Impacts section, checking applicable boxes
-7. Determine label from branch name
-8. Set at least one label
-9. Verify all requirements are met before creating
+3. Remove component prefixes like `[MobileUI]`, `[ComponentName]`, etc. from Jira summary
+4. Format title as: `<jira-issue>: <subject>`
+5. Include colon after Jira issue
+6. Fill Context section with why change is needed
+7. Fill Impacts section, checking applicable boxes
+8. Determine label from Jira issue type (Story/Feature → `feature`, Bug → `bugfix`, etc.)
+9. Set at least one label
+10. Verify all requirements are met before creating
 
 ### Reference Links
 - PR Conventions: https://outsystemsrd.atlassian.net/wiki/spaces/RCP/pages/1544487638/Pull+Requests
