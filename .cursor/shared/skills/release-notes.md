@@ -75,13 +75,61 @@ Fixed an issue that caused dropdown items to be cut off and inaccessible at runt
 - ❌ Include "What I Did" content (that's a separate section)
 - ❌ Be vague about the issue or fix
 
+### API Format Requirements
+
+**CRITICAL**: When updating the Release Note field via API, the field uses **ADF (Atlassian Document Format)**, not plain text strings.
+
+**Required ADF Structure**:
+```json
+{
+  "customfield_12701": {
+    "type": "doc",
+    "version": 1,
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Your release note text here"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Example**:
+```json
+{
+  "customfield_12701": {
+    "type": "doc",
+    "version": 1,
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Fixed an issue that caused dropdown items to be cut off and inaccessible at runtime."
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Note**: Plain string values will be rejected with "Bad Request" errors. Always use the ADF document structure when updating via API.
+
 ### AI Instructions
 
 When adding release notes to a Jira story, the AI MUST:
 1. Read the Jira issue description to understand the story
 2. Review "What I Did" section to understand what was implemented
 3. Write release note from **user perspective** (not technical)
-4. Update the "Release Note" custom field (`customfield_12701`) with the content
+4. Update the "Release Note" custom field (`customfield_12701`) using **ADF format** (see API Format Requirements above)
 5. Ensure content is clear, concise, and user-focused (no title needed - field name is the title)
 6. Set "Hide from Release Notes" field (`customfield_12203`) if applicable (check Confluence guidelines)
 
