@@ -17,101 +17,31 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 
 ## Getting Started
 
-### 1. Clone and Setup
+### Recommended Workflow
 
-You have two options for setup:
+The recommended approach is to **clone the automation repo first**, configure it, then use it to set up your project repositories. This ensures all repos are properly configured with the automation framework.
 
-**Option A: Clone directly to Cursor folder**
-```bash
-# Clone this repository
-git clone https://github.com/OS-paulvisciano/ai-automation.git ~/.cursor/ai-automation
-```
+### 1. Clone the Automation Repository
 
-**Option B: Clone to repos folder and symlink (recommended)**
+Clone the automation repository to your repos folder:
+
 ```bash
 # Clone to your repos folder
 git clone https://github.com/OS-paulvisciano/ai-automation.git ~/repos/ai-automation
 
-# Create symlink so Cursor can access it
-ln -s ~/repos/ai-automation ~/.cursor/ai-automation
+# Navigate to the automation repo
+cd ~/repos/ai-automation
 ```
 
-**Why symlink?** This keeps your repos organized while allowing Cursor to access the framework at the expected location. Changes in either location are the same (they point to the same files).
+**Note:** The automation repo can be cloned anywhere, but keeping it in your repos folder alongside other projects keeps things organized.
 
-### 5. Setup Repo-Specific Access (For Each Repository)
-
-For each repository you work on, integrate the automation framework:
-
-```bash
-# Navigate to your repository
-cd ~/repos/your-repo-name
-
-# Create .cursor directory
-mkdir -p .cursor
-
-# Create symlink to shared automation framework
-ln -s ~/.cursor/ai-automation .cursor/ai-automation
-
-# Create README explaining the setup (optional but recommended)
-cat > .cursor/README.md << 'EOF'
-# Repo-Specific Cursor Configuration
-
-This directory contains repository-specific AI automation configurations and plans.
-
-## Structure
-
-- **`ai-automation/`** - Symlink to shared AI automation framework (`~/.cursor/ai-automation`)
-- **`plans/`** - Repository-specific automation plans (e.g., story-specific workflows)
-- Other repo-specific configurations as needed
-
-## How It Works
-
-The `ai-automation/` folder is a symlink to the shared framework, which provides:
-- Org-level skills and agents
-- Shared MCP server configurations
-- Team and project configurations
-
-This repo can have its own customizations:
-- `plans/` - Specific automation plans for this repo
-- Custom skills/agents if needed (would override shared ones)
-- Repo-specific configurations
-
-## Priority Order
-
-When AI looks for skills/agents, it checks in this order:
-1. `~/.cursor/ai-automation/personal/` - Personal overrides (highest priority)
-2. `.cursor/` (this folder) - Repo-specific overrides
-3. `~/.cursor/ai-automation/projects/{project}/` - Project config
-4. `~/.cursor/ai-automation/teams/{team}/` - Team config
-5. `~/.cursor/ai-automation/skills/`, `agents/` - Org defaults (lowest priority)
-EOF
-```
-
-This allows:
-- Access to shared framework via `.cursor/ai-automation/`
-- Repo-specific items in `.cursor/` (e.g., `plans/`, custom skills/agents)
-- Clear separation between shared and repo-specific configurations
-
-**Verification:**
-After setup, verify the integration works:
-```bash
-# Check symlink exists
-ls -la .cursor/ai-automation
-
-# Verify you can access skills
-ls .cursor/ai-automation/skills/
-
-# Verify you can access project configs
-ls .cursor/ai-automation/projects/
-```
-
-### 2. Configure Personal Settings
+### 2. Configure Credentials
 
 **All MCP credentials are stored in the ai-automation framework** so they can be shared across repositories. Create a `.env` file in the ai-automation repo root with your API keys (this file is gitignored):
 
 ```bash
-# Navigate to ai-automation repo
-cd ~/.cursor/ai-automation  # or ~/repos/paul-visciano-ai-automation
+# Navigate to ai-automation repo (if not already there)
+cd ~/repos/ai-automation
 
 # Copy the example file
 cp .env.example .env
@@ -131,6 +61,11 @@ FIGMA_API_KEY=your-figma-api-key
 # Slack MCP
 SLACK_BOT_TOKEN=xoxb-your-bot-token
 SLACK_CHANNEL_ID=CXXXXXXXXXX
+
+# Azure DevOps PAT (for npm authentication in WidgetLibrary and runtime-mobile-widgets-js)
+# Generate at: https://dev.azure.com/OutSystemsRD/_usersSettings/tokens
+# Required scope: Packaging (Read)
+AZURE_DEVOPS_PAT=your-azure-devops-pat-token
 ```
 
 **Important:** The `.env` file is gitignored and stored in the ai-automation repo, not in individual repositories. This allows credentials to be shared across all repos that use the framework via symlinks.
@@ -188,6 +123,44 @@ After creating `~/.cursor/mcp.json`, you need to:
    - The status should change to "Connected" with tools enabled
 
 **Note:** If MCP servers don't appear after restarting, verify that `~/.cursor/mcp.json` exists and contains valid JSON with the `mcpServers` object populated.
+
+### 4. Setup Project Repositories
+
+Now that the automation framework is configured, use it to set up your project repositories. The setup script will:
+- Clone the project repository (or use existing if present)
+- Create symlink to automation framework in `.cursor/ai-automation`
+- Configure project-specific settings (npm authentication, etc.)
+
+**Available Projects:**
+- `widget-library` - OutSystems Widget Library for Mobile UI components
+- `runtime-mobile-widgets` - Runtime Mobile Widgets JS project
+
+**Example: Setting up WidgetLibrary**
+```bash
+# From the automation repo directory
+cd ~/repos/ai-automation
+
+# Run the setup script
+node scripts/setup-project.js widget-library
+```
+
+The script will:
+1. Clone `OutSystems/OutSystems.WidgetLibrary` to `~/repos/OutSystems.WidgetLibrary` (or use existing)
+2. Create `.cursor/ai-automation` symlink pointing to the automation framework
+3. Prompt for Azure DevOps PAT if missing (saves to `.env` file)
+4. Configure npm authentication
+5. Set up `.npmrc` files
+
+**Why symlink?** The symlink ensures:
+- Updates to automation framework docs propagate to all repos automatically
+- Works in both single-repo and multi-repo workspace scenarios
+- Single source of truth for automation framework
+- Each repo can still have its own `.cursor/plans/` and customizations
+
+**For complete workflow documentation**, see [projects/README.md](./projects/README.md) which includes:
+- Complete setup workflow for each project
+- Step-by-step instructions from clone to XIF creation
+- Project-specific automation scripts
 
 ## Usage
 
