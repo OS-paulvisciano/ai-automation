@@ -96,6 +96,24 @@ project = ROU AND status = "In Progress" AND assignee = currentUser()
 project = ROU AND issuekey = ROU-12461
 ```
 
+### Release Notes
+
+**When to Add**:
+- After completing implementation
+- Before creating PR
+- When story is ready for review
+- **MUST** be included in all user-facing changes (bugs, features, improvements)
+
+**Location**:
+- Use the dedicated "Release Note" custom field (`customfield_12701`)
+- This is a separate field in Jira, NOT part of the description
+- See `skill:release-notes` for detailed guidelines
+
+**Integration with "What I Did"**:
+- "What I Did" = Technical implementation details (for developers)
+- "Release Note" = User-facing description (for end users)
+- Both should be updated together when completing a story
+
 ### AI Instructions
 
 When updating Jira, the AI MUST:
@@ -106,9 +124,10 @@ When updating Jira, the AI MUST:
    - Implementation summary
    - Technical details
    - Verification steps
-5. Add comment if significant decisions were made
-6. Use clear, professional language
-7. Include relevant links (PR, Figma, etc.)
+5. Update "Release Note" custom field (`customfield_12701`) with user-focused description (see `skill:release-notes`)
+6. Add comment if significant decisions were made
+7. Use clear, professional language
+8. Include relevant links (PR, Figma, etc.)
 
 ### Common Mistakes to Avoid
 
