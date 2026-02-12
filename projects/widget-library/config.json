@@ -1,0 +1,21 @@
+{
+  "project": "OutSystems.WidgetLibrary",
+  "description": "OutSystems Widget Library for Mobile UI components",
+  "github": {
+    "repo": "OutSystems.WidgetLibrary",
+    "baseBranch": "dev",
+    "org": "OutSystems"
+  },
+  "jira": {
+    "project": "ROU"
+  },
+  "setup": {
+    "requiresNpmAuth": true,
+    "npmAuthType": "azure-devops",
+    "npmAuthTokenEnvVar": "AZURE_DEVOPS_PAT",
+    "setupSteps": [
+      "npm-auth",
+      "symlink-automation"
+    ]
+  }
+}
