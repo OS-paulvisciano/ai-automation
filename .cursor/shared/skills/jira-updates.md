@@ -34,6 +34,9 @@
    - How to test the changes
    - Storybook steps (if applicable)
    - Manual testing instructions
+   - **ODC App URL** (if applicable): Include link to ODC app for testing
+     - Format: `ODC App: https://eng-starter-apps-dev.outsystems.app/{app-name}/Home`
+     - Example: `ODC App: https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home`
 
 **Format Example**:
 ```markdown
@@ -55,6 +58,7 @@
   - Background: #EAE9E9 ✓
   - Icon color: #242424 ✓
   - Border radius: 8px ✓
+- ODC App: https://eng-starter-apps-dev.outsystems.app/{app-name}/Home (if applicable)
 ```
 
 ### Comment Updates
@@ -123,11 +127,11 @@ When updating Jira, the AI MUST:
 4. Update "What I Did" section with:
    - Implementation summary
    - Technical details
-   - Verification steps
+   - Verification steps (including ODC App URL if applicable)
 5. Update "Release Note" custom field (`customfield_12701`) with user-focused description (see `skill:release-notes`)
 6. Add comment if significant decisions were made
 7. Use clear, professional language
-8. Include relevant links (PR, Figma, etc.)
+8. Include relevant links (PR, Figma, ODC App URL, etc.)
 
 ### Common Mistakes to Avoid
 
