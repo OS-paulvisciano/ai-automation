@@ -1,6 +1,6 @@
 # Mobile UI Lifecycle Reference: TODO to DONE
 
-> **Note**: This is a reference document, not an agent. For actual workflow automation, use `agent:mobile-ui-change`.
+> **Note**: This is a reference document, not an agent. For actual workflow automation, use `agent:mobile-ui`.
 
 **Example Story**: ROU-12461 - Card - Implement Android close button pressed state
 
@@ -8,10 +8,10 @@
 
 This document provides a complete reference of the Mobile UI change workflow from picking up a story in "TO DO" to moving it to "DONE", showing automated vs manual steps. It serves as a comprehensive guide to understand the full lifecycle and automation status.
 
-**For workflow automation, use**: `agent:mobile-ui-change` (orchestrator)
+**For workflow automation, use**: `agent:mobile-ui` (orchestrator)
 
 **Agent Architecture**:
-- **Orchestrator**: `agent:mobile-ui-change` (in shared automation repo) - Coordinates end-to-end workflow
+- **Orchestrator**: `agent:mobile-ui` (in automation repo) - Coordinates end-to-end workflow
 - **Repo-Specific Agents**:
   - `agent:widgets-js` (in `runtime-mobile-widgets-js/.cursor/agents/`) - Handles Phase 1 (implementation)
   - `agent:widget-library` (in `OutSystems.WidgetLibrary/.cursor/agents/`) - Handles Phase 2 & 3 (WidgetLibrary + XIF)

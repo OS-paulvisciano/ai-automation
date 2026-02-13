@@ -1,7 +1,3 @@
----
-name: README
-model: fast
----
 
 # Agents
 
@@ -21,8 +17,8 @@ Agents are workflow definitions that orchestrate multiple skills to complete end
 
 **Note**: Orchestrator agents are located in the automation repo at `.cursor/agents/`, not in shared.
 
-- **`mobile-ui-change`** - Located in `.cursor/agents/mobile-ui-change.md` (automation repo)
-  - End-to-end Mobile UI change workflow orchestrator (delegates to repo-specific agents)
+- **`mobile-ui`** - Located in `.cursor/agents/mobile-ui.md` (automation repo)
+  - End-to-end Mobile UI workflow orchestrator (delegates to repo-specific agents)
   - **Primary agent for Mobile UI work**
 
 ### Repository-Specific Agents
@@ -42,7 +38,7 @@ Repository-specific agents are located in their respective repositories:
 ## Using Agents
 
 Reference agents in your AI prompts:
-- "Run agent:mobile-ui-change for story ROU-12345" (primary orchestrator for Mobile UI work)
+- "Run agent:mobile-ui for story ROU-12345" (primary orchestrator for Mobile UI work)
 - "Use agent:widgets-js for story ROU-12345" (repo-specific agent for widgets-js work)
 - "Use agent:widget-library for story ROU-12345" (repo-specific agent for WidgetLibrary work)
 
@@ -73,14 +69,14 @@ Each agent document includes:
 
 **Orchestrator Pattern**: 
 - **Orchestrator Agents** (shared): Coordinate workflows across multiple repositories
-  - `agent:mobile-ui-change` - Delegates to repo-specific agents for end-to-end Mobile UI workflows
+  - `agent:mobile-ui` - Delegates to repo-specific agents for end-to-end Mobile UI workflows
 - **Repository-Specific Agents**: Handle workflows within a single repository
   - Located in their respective repos (e.g., `runtime-mobile-widgets-js/.cursor/agents/`, `OutSystems.WidgetLibrary/.cursor/agents/`)
 
 **Agent Dependencies**:
 - Orchestrator agents use shared skills and delegate to repo-specific agents
 - Repo-specific agents use shared skills and repo-specific skills
-- `agent:mobile-ui-change` delegates to: `agent:widgets-js`, `agent:widget-library`
+- `agent:mobile-ui` delegates to: `agent:widgets-js`, `agent:widget-library`
 
 ## Reference Documentation
 

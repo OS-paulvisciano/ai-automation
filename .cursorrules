@@ -20,7 +20,7 @@ When the user requests automation tasks, use natural language and automatically 
 - "Create a branch" → Use `.cursor/shared/skills/branch-naming.md` rules
 - "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification.md` rules
 - "Test in ODC" or "Create test app" → Use `.cursor/shared/skills/odc-testing.md` rules
-- "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/agents/mobile-ui-change.md` workflow
+- "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/agents/mobile-ui.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
 
@@ -60,8 +60,8 @@ When resolving which rules to use, follow this priority order:
 
 ## Workflow Agents
 
-### Mobile UI Change (Orchestrator)
-- Use `agent:mobile-ui-change` for complete Mobile UI story workflows
+### Mobile UI (Orchestrator)
+- Use `agent:mobile-ui` for complete Mobile UI story workflows
 - Orchestrates: delegates to `agent:widgets-js` → `agent:widget-library` → ODC testing → PR creation
 - Handles cross-repo coordination and ODC testing
 - Most comprehensive agent for Mobile UI work
@@ -102,7 +102,7 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 **AI**: Read `.cursor/shared/skills/jira-updates.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
 
 **User**: "Complete story ROU-12345" or "End-to-end Mobile UI change"
-**AI**: Read `.cursor/agents/mobile-ui-change.md` (orchestrator) which delegates to:
+**AI**: Read `.cursor/agents/mobile-ui.md` (orchestrator) which delegates to:
   - `runtime-mobile-widgets-js/.cursor/agents/widgets-js.md` (Phase 1)
   - `OutSystems.WidgetLibrary/.cursor/agents/widget-library.md` (Phase 2 & 3)
   - Then handles ODC testing, Jira updates, and PR creation

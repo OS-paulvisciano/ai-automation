@@ -110,7 +110,7 @@ Team members should:
 Once shared, team members can reference skills and agents:
 
 - "Use skill:pr-creation to create a PR"
-- "Run agent:mobile-ui-change for story ROU-12345"
+- "Run agent:mobile-ui for story ROU-12345"
 - "Follow skill:jira-updates to update the story"
 
 ## Contributing

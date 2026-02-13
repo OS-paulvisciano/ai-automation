@@ -1,11 +1,11 @@
 ---
-name: mobile-ui-change
+name: mobile-ui
 model: fast
 ---
 
-# Agent: Mobile UI Change
+# Agent: Mobile UI
 
-**ID**: `agent:mobile-ui-change`  
+**ID**: `agent:mobile-ui`  
 **Version**: `1.0.0`  
 **Type**: Orchestrator Agent (meta-agent that coordinates multiple skills and agents)
 
