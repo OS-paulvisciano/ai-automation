@@ -15,6 +15,7 @@ Agents are workflow definitions that orchestrate multiple skills to complete end
 - **`story-completion`** - Complete story implementation workflow (branch → implement → verify → document → PR)
 - **`design-verification`** - Design verification workflow (Figma → compare → verify)
 - **`pr-creation`** - PR creation workflow (validate → create → label)
+- **`mobile-ui-change`** - End-to-end Mobile UI change workflow (widgetjs → widgetlib → XIF → ODC testing)
 
 ## Using Agents
 

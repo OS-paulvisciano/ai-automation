@@ -21,6 +21,7 @@ When the user requests automation tasks, use natural language and automatically 
 - "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification.md` rules
 - "Test in ODC" or "Create test app" → Use `.cursor/shared/skills/odc-testing.md` rules
 - "Complete this story" → Use `.cursor/shared/agents/story-completion.md` workflow
+- "Publish XIF" or "End-to-end Mobile UI change" → Use `.cursor/shared/agents/mobile-ui-change.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
 
