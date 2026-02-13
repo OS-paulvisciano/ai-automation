@@ -19,42 +19,88 @@
 - Before creating PR
 - When story is ready for review
 
-**Required Content**:
-1. **Implementation Summary**
-   - What was implemented
-   - Key changes made
-   - Files modified
+**CRITICAL: AI MUST NOT Automatically Update This Section**
+- **DO NOT** use `editJiraIssue` to update the "What I Did" section directly
+- **DO NOT** modify the description field containing "What I Did"
+- **REASON**: Automatic updates cause formatting issues in Jira
+- **INSTEAD**: Provide the formatted "What I Did" content in the chat for the user to copy/paste manually
 
-2. **Technical Details**
-   - Approach taken
-   - Design decisions
-   - Any notable patterns or conventions followed
+**Required Format**:
+The "What I Did" section must follow this exact structure:
 
-3. **Verification Steps**
-   - How to test the changes
-   - Storybook steps (if applicable)
-   - Manual testing instructions
-
-**Format Example**:
 ```markdown
-## What I Did
+**What I Did**
 
-### Implementation
-- Added pressed state styling for Card dismiss button on Android
-- Implemented using Ionic CSS variables (--background-activated, --color-activated, --border-radius)
-- Used design tokens: $token-bg-neutral-subtlest-press, $token-icon-default, $token-soft-xs
+**Code:**
 
-### Technical Details
-- Added platform-specific SCSS in .plt-android block
-- Matches ghost button pressed state styling
-- Border radius uses semantic token $token-soft-xs (8px)
+PR → 
 
-### Verification
-- Tested in Storybook with Android viewport (Pixel, Nexus)
-- Verified colors match Figma specs:
-  - Background: #EAE9E9 ✓
-  - Icon color: #242424 ✓
-  - Border radius: 8px ✓
+OutSystems → N/A
+
+**Points of Impact:**
+
+- Component/Area affected: Description of impact
+- Additional impacts as needed
+
+**Samples:**
+
+Screens → [ODC App URL if applicable]
+
+**Automated Tests:**
+
+PR → 
+
+**Test Cases:**
+
+- **a.** Step 1 description
+- **b.** Step 2 description
+- **c.** **Expected:** Expected result
+- **d.** Step 4 description
+- **e.** **Expected:** Expected result
+- Continue with additional test steps as needed
+```
+
+**Format Rules**:
+- Use bullet points with letters (a, b, c, etc.) for test case steps
+- Use **Expected:** (bolded) for expected results
+- Include ODC App URL in Samples section if available
+- Leave PR links empty (→) to be filled by user
+- Use "N/A" for OutSystems if not applicable
+- Do NOT include "Technical Details" section
+- Keep test cases focused on how to manually test the feature
+
+**Example**:
+```markdown
+**What I Did**
+
+**Code:**
+
+PR → 
+
+OutSystems → N/A
+
+**Points of Impact:**
+
+- Carousel component: Added pause-on-interaction behavior when autoplay is enabled
+- Default behavior: When autoplay is enabled, the carousel pauses when a slide is pressed and resumes when the interaction ends
+
+**Samples:**
+
+Screens → https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home
+
+**Automated Tests:**
+
+PR → 
+
+**Test Cases:**
+
+- **a.** Open Sample
+- **b.** Configure the Carousel with `Autoplay = true` and `Is Playing = true`
+- **c.** **Expected:** The carousel automatically advances slides at the configured interval
+- **d.** Press and hold on any slide in the carousel
+- **e.** **Expected:** The carousel pauses and stops advancing slides while the slide is being pressed
+- **f.** Release the slide (pointer up)
+- **g.** **Expected:** The carousel resumes autoplay and continues advancing slides automatically
 ```
 
 ### Comment Updates
@@ -123,10 +169,12 @@ When updating Jira, the AI MUST:
 1. Extract Jira issue ID from context (branch name, PR title, etc.)
 2. Search for issue to verify it exists
 3. Read current issue description
-4. Update "What I Did" section with:
-   - Implementation summary
-   - Technical details
-   - Verification steps
+4. **DO NOT automatically update "What I Did" section** - Instead, provide formatted content in chat for user to copy/paste manually
+   - Format according to the "What I Did" section format rules above
+   - Include all required sections: Code, Points of Impact, Samples, Automated Tests, Test Cases
+   - Use lettered bullet points (a, b, c, etc.) for test cases
+   - Include **Expected:** (bolded) for expected results in test cases
+   - Include ODC App URL in Samples section if available
 5. Update "Release Note" custom field (`customfield_12701`) with user-focused description (see `skill:release-notes`)
 6. Add comment if significant decisions were made or if ODC App URL is available
    - **ODC App URLs MUST be added as comments, NOT in the "What I Did" section**
@@ -142,13 +190,17 @@ When updating Jira, the AI MUST:
    - ❌ `rou-12461`
    - ✅ `ROU-12461`
 
-2. **Incomplete "What I Did" Section**
-   - Must include implementation details
-   - Must include verification steps
+2. **Automatically Updating "What I Did" Section**
+   - ❌ Using `editJiraIssue` to update description field
+   - ✅ Providing formatted content in chat for user to copy/paste manually
 
-3. **Missing Context**
+3. **Incomplete "What I Did" Section**
+   - Must include all required sections: Code, Points of Impact, Samples, Automated Tests, Test Cases
+   - Test cases must use lettered format (a, b, c, etc.) with **Expected:** for results
+
+4. **Missing Context**
    - Always explain why changes were made
-   - Include technical rationale
+   - Include impact description in Points of Impact section
 
 ### Reference
 - Jira Project: `outsystemsrd`
