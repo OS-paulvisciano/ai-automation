@@ -18,11 +18,17 @@ Thank you for contributing to the AI Automation Framework!
 
 ### Adding New Agents
 
-1. Create `.cursor/shared/agents/{agent-name}.md`
+**For Orchestrator Agents** (automation repo):
+1. Create `.cursor/agents/{agent-name}.md` in automation repo
 2. Define workflow steps
 3. List required skills
 4. Document configuration options
-5. Update `.cursor/shared/agents/README.md`
+
+**For Repository-Specific Agents**:
+1. Create `.cursor/agents/{agent-name}.md` in target repository
+2. Define workflow steps
+3. List required skills (shared and repo-specific)
+4. Document configuration options
 6. Submit a pull request
 
 ### Adding MCP Servers

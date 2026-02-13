@@ -10,8 +10,8 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 
 **Shared Framework (symlinked to individual repos):**
 - **`.cursor/shared/skills/`** - Reusable task rules and guidelines (PR creation, Jira updates, etc.)
-- **`.cursor/shared/agents/`** - Workflow definitions that combine multiple skills
-- **`.cursor/shared/teams/`** - Team-specific overrides and customizations
+- **`.cursor/agents/`** - Orchestrator agents (automation repo only)
+- **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 
 **Automation Repo Only:**
 - **`infrastructure/`** - MCP server configurations and setup
@@ -187,22 +187,23 @@ The framework uses a **priority-based override system** that allows customizatio
 
 ```
 Priority (Highest → Lowest):
-1. .cursor/ (in repo)                    # Repo-specific overrides (if .cursor/shared symlink exists)
-2. .cursor/shared/teams/{team}/           # Team-specific overrides
-3. .cursor/shared/skills/, .cursor/shared/agents/  # Org-level defaults (shared)
+1. .cursor/ (in user's repo)                    # Repo-specific agents, skills, and overrides
+2. .cursor/teams/{team}/ (automation repo)       # Team-specific overrides
+3. .cursor/shared/skills/ (automation repo)      # Shared skills (org-level defaults)
 ```
 
 **How it works:**
-- **Shared defaults** (`.cursor/shared/skills/`, `.cursor/shared/agents/`) provide org-wide standards
-- **Team overrides** (`.cursor/shared/teams/{team}/`) customize for specific teams
-- **Repo-specific overrides** (`.cursor/` in individual repos) allow per-repo customizations
+- **Shared skills** (`.cursor/shared/skills/`) provide org-wide standards for reusable tasks
+- **Orchestrator agents** (`.cursor/agents/`) coordinate workflows across repos (automation repo only)
+- **Team overrides** (`.cursor/teams/{team}/`) customize for specific teams (automation repo only)
+- **Repo-specific agents/skills** (`.cursor/agents/`, `.cursor/skills/` in individual repos) allow per-repo customizations
 - **Project configs** (`projects/{project}/config.json` in automation repo) are used by setup scripts, not directly by individual repos
 
 **Example:**
 If you're working on `runtime-mobile-widgets` project with `.cursor/shared/` symlink:
 1. AI looks for `.cursor/skills/pr-creation.md` in repo (if exists, use it)
-2. Else looks for `.cursor/shared/teams/ui-components/skills/pr-creation.md` (if exists, use it)
-3. Else uses `.cursor/shared/skills/pr-creation.md` (org default)
+2. Else looks for `.cursor/teams/ui-components/skills/pr-creation.md` in automation repo (if exists, use it)
+3. Else uses `.cursor/shared/skills/pr-creation.md` in automation repo (org default)
 
 This allows teams to customize workflows while maintaining consistency across the organization.
 
@@ -217,10 +218,15 @@ This allows teams to customize workflows while maintaining consistency across th
 
 ### Adding New Agents
 
-1. Create `.cursor/shared/agents/{agent-name}.md`
+**For Orchestrator Agents** (automation repo):
+1. Create `.cursor/agents/{agent-name}.md` in automation repo
 2. Define workflow steps
 3. List required skills
-4. Update `.cursor/shared/agents/README.md`
+
+**For Repository-Specific Agents**:
+1. Create `.cursor/agents/{agent-name}.md` in target repository
+2. Define workflow steps
+3. List required skills (shared and repo-specific)
 
 ### Team Customizations
 
@@ -231,9 +237,9 @@ Teams can override org-level skills/agents by creating:
 
 **Example:** UI Components team might override PR creation to add team-specific requirements:
 ```bash
-# Create team override
-mkdir -p .cursor/shared/teams/ui-components/skills
-cp .cursor/shared/skills/pr-creation.md .cursor/shared/teams/ui-components/skills/pr-creation.md
+# Create team override (in automation repo)
+mkdir -p .cursor/teams/ui-components/skills
+cp .cursor/shared/skills/pr-creation.md .cursor/teams/ui-components/skills/pr-creation.md
 # Edit to add team-specific rules
 ```
 
@@ -275,8 +281,8 @@ These are never committed and take highest priority in that repo.
 - [Infrastructure Setup](./infrastructure/README.md) - MCP server configuration details
 - [Automation Setup](./docs/AUTOMATION_SETUP.md) - Overview of automation workflows
 - [Skills Guide](./.cursor/shared/skills/README.md) - Available skills and how to use them
-- [Agents Guide](./.cursor/shared/agents/README.md) - Available workflows
-- [Team Customization](./.cursor/shared/teams/README.md) - How to customize for your team
+- [Agents Guide](./.cursor/shared/agents/README.md) - Available workflows (note: orchestrator agents are in `.cursor/agents/`)
+- [Team Customization](./.cursor/teams/README.md) - How to customize for your team
 - [TODO](./TODO.md) - Future enhancements and improvements
 
 ## License

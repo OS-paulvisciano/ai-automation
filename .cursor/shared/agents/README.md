@@ -12,16 +12,34 @@ Agents are workflow definitions that orchestrate multiple skills to complete end
 
 ## Available Agents
 
-- **`mobile-ui-change`** - End-to-end Mobile UI change workflow (branch → implement → widgetlib → XIF → ODC testing → PR) - **Primary agent for Mobile UI work**
-- **`design-verification`** - Design verification workflow (Figma → compare → verify)
-- **`pr-creation`** - PR creation workflow (validate → create → label)
+### Orchestrator Agents
+
+**Note**: Orchestrator agents are located in the automation repo at `.cursor/agents/`, not in shared.
+
+- **`mobile-ui-change`** - Located in `.cursor/agents/mobile-ui-change.md` (automation repo)
+  - End-to-end Mobile UI change workflow orchestrator (delegates to repo-specific agents)
+  - **Primary agent for Mobile UI work**
+
+### Repository-Specific Agents
+
+Repository-specific agents are located in their respective repositories:
+
+- **`agent:widgets-js`** - Located in `runtime-mobile-widgets-js/.cursor/agents/widgets-js.md`
+  - Handles implementation workflow for widgets-js repository
+  - Branch creation, implementation, Storybook testing, build, commit/push
+
+- **`agent:widget-library`** - Located in `OutSystems.WidgetLibrary/.cursor/agents/widget-library.md`
+  - Handles WidgetLibrary consumption and XIF preparation
+  - Branch creation, update runtime widgets, prepare XIF, coordinate publishing
+
+**Note**: `design-verification` and `pr-creation` are skills only, not agents. Agents orchestrate multi-step workflows across repos/domains, while skills are single tasks.
 
 ## Using Agents
 
 Reference agents in your AI prompts:
-- "Run agent:mobile-ui-change for story ROU-12345" (primary agent for Mobile UI work)
-- "Use agent:design-verification to check my component"
-- "Execute agent:pr-creation"
+- "Run agent:mobile-ui-change for story ROU-12345" (primary orchestrator for Mobile UI work)
+- "Use agent:widgets-js for story ROU-12345" (repo-specific agent for widgets-js work)
+- "Use agent:widget-library for story ROU-12345" (repo-specific agent for WidgetLibrary work)
 
 ## Agent Structure
 
@@ -34,17 +52,30 @@ Each agent document includes:
 
 ## Adding New Agents
 
-1. Create `.cursor/shared/agents/{agent-name}.md`
+**For Orchestrator Agents** (automation repo):
+1. Create `.cursor/agents/{agent-name}.md` in the automation repo
 2. Define workflow steps
 3. List required skills
 4. Document configuration options
-5. Update this README
 
-## Agent Dependencies
+**For Repository-Specific Agents**:
+1. Create `.cursor/agents/{agent-name}.md` in the target repository
+2. Define workflow steps
+3. List required skills (shared and repo-specific)
+4. Document configuration options
 
-Agents depend on skills:
-- `mobile-ui-change` uses: `branch-naming`, `jira-updates`, `pr-creation`, `design-verification`, `release-notes`, `odc-testing`
-- Agents can call other agents for sub-workflows
+## Agent Architecture
+
+**Orchestrator Pattern**: 
+- **Orchestrator Agents** (shared): Coordinate workflows across multiple repositories
+  - `agent:mobile-ui-change` - Delegates to repo-specific agents for end-to-end Mobile UI workflows
+- **Repository-Specific Agents**: Handle workflows within a single repository
+  - Located in their respective repos (e.g., `runtime-mobile-widgets-js/.cursor/agents/`, `OutSystems.WidgetLibrary/.cursor/agents/`)
+
+**Agent Dependencies**:
+- Orchestrator agents use shared skills and delegate to repo-specific agents
+- Repo-specific agents use shared skills and repo-specific skills
+- `agent:mobile-ui-change` delegates to: `agent:widgets-js`, `agent:widget-library`
 
 ## Reference Documentation
 
@@ -52,8 +83,8 @@ Agents depend on skills:
 
 ## Team/Project Overrides
 
-Teams can override org-level agents:
-- `.cursor/shared/teams/{team}/agents/{agent-name}.md` - Team override
+Teams can override orchestrator agents:
+- `.cursor/teams/{team}/agents/{agent-name}.md` - Team override (in automation repo)
 
 **Note:** Project overrides are not accessible via symlink (projects folder is automation-repo-only).
 

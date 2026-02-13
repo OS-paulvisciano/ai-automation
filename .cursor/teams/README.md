@@ -9,7 +9,7 @@ Teams can override org-level skills and agents to customize workflows for their 
 ## Structure
 
 ```
-.cursor/shared/teams/
+.cursor/teams/
 ├── {team-name}/
 │   ├── skills/          # Team-specific skill overrides
 │   ├── agents/          # Team-specific agent overrides
@@ -28,10 +28,10 @@ Teams can override org-level skills and agents to customize workflows for their 
 
 ## Adding Team Overrides
 
-1. Create `.cursor/shared/teams/{team-name}/` directory
+1. Create `.cursor/teams/{team-name}/` directory (in automation repo)
 2. Create override files:
    - `skills/{skill-name}.md` - Override specific skill
-   - `agents/{agent-name}.md` - Override specific agent
+   - `agents/{agent-name}.md` - Override orchestrator agent
 3. Add `config.json` for team-specific settings
 4. Document why override is needed
 

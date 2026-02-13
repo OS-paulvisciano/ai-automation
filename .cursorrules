@@ -4,9 +4,9 @@ This repository contains shared AI automation rules, skills, and workflows for O
 
 ## Framework Structure
 
-- **`.cursor/shared/skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification)
-- **`.cursor/shared/agents/`** - Workflow definitions that combine multiple skills
-- **`.cursor/shared/teams/`** - Team-specific overrides
+- **`.cursor/shared/skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification) - **Shared across all repos**
+- **`.cursor/agents/`** - Orchestrator agents (automation repo only)
+- **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 - **`infrastructure/`** - MCP server configurations (automation repo only)
 - **`projects/`** - Project-specific configurations (automation repo only)
 
@@ -20,7 +20,7 @@ When the user requests automation tasks, use natural language and automatically 
 - "Create a branch" → Use `.cursor/shared/skills/branch-naming.md` rules
 - "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification.md` rules
 - "Test in ODC" or "Create test app" → Use `.cursor/shared/skills/odc-testing.md` rules
-- "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/shared/agents/mobile-ui-change.md` workflow
+- "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/agents/mobile-ui-change.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
 
@@ -28,9 +28,12 @@ When the user requests automation tasks, use natural language and automatically 
 
 When resolving which rules to use, follow this priority order:
 
-1. `.cursor/` (in user's repo) - Repo-specific overrides (highest priority)
-2. `.cursor/shared/teams/{team}/` - Team-specific overrides
-3. `.cursor/shared/skills/`, `.cursor/shared/agents/` - Org-level defaults (lowest priority)
+1. `.cursor/` (in user's repo) - Repo-specific agents, skills, and overrides (highest priority)
+2. `.cursor/teams/{team}/` (in automation repo) - Team-specific overrides
+3. `.cursor/shared/skills/` (in automation repo) - Shared skills (lowest priority)
+
+**Orchestrator Agents**: Located in automation repo `.cursor/agents/` (e.g., `mobile-ui-change.md`)
+**Repository-Specific Agents/Skills**: Located in their respective repos (e.g., `runtime-mobile-widgets-js/.cursor/agents/`, `OutSystems.WidgetLibrary/.cursor/skills/`)
 
 ## Key Rules
 
@@ -47,8 +50,8 @@ When resolving which rules to use, follow this priority order:
 
 ### Branch Naming
 - **Always** use `skill:branch-naming` when creating branches
-- **Must** follow format: `<issue-type>/<jira-issue-number>-<short-name>`
-- **Must** branch from `main`
+- **Must** follow format: `ROU-XXXX` (just the Jira issue ID)
+- **Must** branch from `main` (for widgets-js) or `dev` (for WidgetLibrary)
 
 ### Design Verification
 - **Always** use `skill:design-verification` when verifying designs against Figma
@@ -57,16 +60,22 @@ When resolving which rules to use, follow this priority order:
 
 ## Workflow Agents
 
-### Mobile UI Change
+### Mobile UI Change (Orchestrator)
 - Use `agent:mobile-ui-change` for complete Mobile UI story workflows
-- Combines: branch creation → implementation → documentation → WidgetLibrary consumption → XIF publishing → ODC testing → PR creation
-- Automatically handles Jira updates, Release Notes, and PR creation
+- Orchestrates: delegates to `agent:widgets-js` → `agent:widget-library` → ODC testing → PR creation
+- Handles cross-repo coordination and ODC testing
 - Most comprehensive agent for Mobile UI work
 
-### Design Verification
-- Use `agent:design-verification` to verify component designs
-- Fetches Figma specs and compares with codebase
-- Provides comparison table of values
+### Repository-Specific Agents
+- **`agent:widgets-js`** - Located in `runtime-mobile-widgets-js/.cursor/agents/`
+  - Handles implementation workflow for widgets-js repository
+  - Can be used standalone or as part of orchestrator workflow
+
+- **`agent:widget-library`** - Located in `OutSystems.WidgetLibrary/.cursor/agents/`
+  - Handles WidgetLibrary consumption and XIF preparation
+  - Can be used standalone or as part of orchestrator workflow
+
+**Note**: `design-verification` and `pr-creation` are skills only, not agents. Agents orchestrate workflows, skills are single tasks.
 
 ## MCP Servers
 
@@ -81,7 +90,7 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 - **Never commit credentials** - All credentials are in `.env` files (gitignored)
 - **Always validate** - Check that PR titles, branch names, etc. follow conventions
 - **Use natural language** - Infer which skill/agent to use from the user's request (no need for explicit prefixes)
-- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/shared/skills/` or `.cursor/shared/agents/` and follow its rules
+- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/shared/skills/` (shared skills) or `.cursor/agents/` (orchestrator agents) or repo-specific `.cursor/agents/` (repo agents) and follow its rules
 - **Use project configs** - Check `projects/{project}/config.json` in the automation repo for project-specific settings (Figma file keys, Jira projects, etc.)
 
 ## Examples
@@ -93,7 +102,10 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 **AI**: Read `.cursor/shared/skills/jira-updates.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
 
 **User**: "Complete story ROU-12345" or "End-to-end Mobile UI change"
-**AI**: Read `.cursor/shared/agents/mobile-ui-change.md` and follow that workflow to handle branch creation, implementation, WidgetLibrary consumption, XIF publishing, ODC testing, Jira updates, and PR creation.
+**AI**: Read `.cursor/agents/mobile-ui-change.md` (orchestrator) which delegates to:
+  - `runtime-mobile-widgets-js/.cursor/agents/widgets-js.md` (Phase 1)
+  - `OutSystems.WidgetLibrary/.cursor/agents/widget-library.md` (Phase 2 & 3)
+  - Then handles ODC testing, Jira updates, and PR creation
 
 **User**: "Check if my component matches Figma"
 **AI**: Read `.cursor/shared/skills/design-verification.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.

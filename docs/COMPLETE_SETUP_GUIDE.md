@@ -191,9 +191,11 @@ This repo can have its own customizations:
 ## Priority Order
 
 When AI looks for skills/agents, it checks in this order:
-1. `.cursor/` (this folder) - Repo-specific overrides (highest priority)
-2. `.cursor/shared/teams/{team}/` - Team config
-3. `.cursor/shared/skills/`, `.cursor/shared/agents/` - Org defaults (lowest priority)
+1. `.cursor/` (in user's repo) - Repo-specific agents, skills, and overrides (highest priority)
+2. `.cursor/teams/{team}/` (in automation repo) - Team-specific overrides
+3. `.cursor/shared/skills/` (in automation repo) - Shared skills (org-level defaults, lowest priority)
+
+**Note**: Orchestrator agents are in `.cursor/agents/` (automation repo only), not in shared.
 EOF
 ```
 
@@ -208,11 +210,11 @@ ls -la .cursor/shared
 # Verify you can access skills
 ls .cursor/shared/skills/
 
-# Verify you can access agents
-ls .cursor/shared/agents/
+# Verify you can access shared skills
+ls .cursor/shared/skills/
 
-# Verify you can access teams
-ls .cursor/shared/teams/
+# Note: Orchestrator agents are in automation repo .cursor/agents/, not in shared
+# Note: Teams are in automation repo .cursor/teams/, not in shared
 ```
 
 ## Step 7: Test MCP Connections
