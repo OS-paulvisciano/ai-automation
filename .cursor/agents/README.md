@@ -1,3 +1,8 @@
+---
+name: README
+model: fast
+---
+
 # Agents
 
 Workflow definitions that combine multiple skills to accomplish complex tasks.
