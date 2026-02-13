@@ -20,8 +20,7 @@ When the user requests automation tasks, use natural language and automatically 
 - "Create a branch" → Use `.cursor/shared/skills/branch-naming.md` rules
 - "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification.md` rules
 - "Test in ODC" or "Create test app" → Use `.cursor/shared/skills/odc-testing.md` rules
-- "Complete this story" → Use `.cursor/shared/agents/story-completion.md` workflow
-- "Publish XIF" or "End-to-end Mobile UI change" → Use `.cursor/shared/agents/mobile-ui-change.md` workflow
+- "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/shared/agents/mobile-ui-change.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
 
@@ -58,10 +57,11 @@ When resolving which rules to use, follow this priority order:
 
 ## Workflow Agents
 
-### Story Completion
-- Use `agent:story-completion` for complete story workflows
-- Combines: branch creation → implementation → documentation → PR creation
-- Automatically handles Jira updates and PR creation
+### Mobile UI Change
+- Use `agent:mobile-ui-change` for complete Mobile UI story workflows
+- Combines: branch creation → implementation → documentation → WidgetLibrary consumption → XIF publishing → ODC testing → PR creation
+- Automatically handles Jira updates, Release Notes, and PR creation
+- Most comprehensive agent for Mobile UI work
 
 ### Design Verification
 - Use `agent:design-verification` to verify component designs
@@ -92,8 +92,8 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 **User**: "Update the Jira story with what I did"
 **AI**: Read `.cursor/shared/skills/jira-updates.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
 
-**User**: "Complete story ROU-12345"
-**AI**: Read `.cursor/shared/agents/story-completion.md` and follow that workflow to handle branch creation, implementation verification, Jira updates, and PR creation.
+**User**: "Complete story ROU-12345" or "End-to-end Mobile UI change"
+**AI**: Read `.cursor/shared/agents/mobile-ui-change.md` and follow that workflow to handle branch creation, implementation, WidgetLibrary consumption, XIF publishing, ODC testing, Jira updates, and PR creation.
 
 **User**: "Check if my component matches Figma"
 **AI**: Read `.cursor/shared/skills/design-verification.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.

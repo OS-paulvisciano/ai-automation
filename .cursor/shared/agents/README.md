@@ -12,15 +12,14 @@ Agents are workflow definitions that orchestrate multiple skills to complete end
 
 ## Available Agents
 
-- **`story-completion`** - Complete story implementation workflow (branch → implement → verify → document → PR)
+- **`mobile-ui-change`** - End-to-end Mobile UI change workflow (branch → implement → widgetlib → XIF → ODC testing → PR) - **Primary agent for Mobile UI work**
 - **`design-verification`** - Design verification workflow (Figma → compare → verify)
 - **`pr-creation`** - PR creation workflow (validate → create → label)
-- **`mobile-ui-change`** - End-to-end Mobile UI change workflow (widgetjs → widgetlib → XIF → ODC testing)
 
 ## Using Agents
 
 Reference agents in your AI prompts:
-- "Run agent:story-completion for story ROU-12345"
+- "Run agent:mobile-ui-change for story ROU-12345" (primary agent for Mobile UI work)
 - "Use agent:design-verification to check my component"
 - "Execute agent:pr-creation"
 
@@ -44,8 +43,12 @@ Each agent document includes:
 ## Agent Dependencies
 
 Agents depend on skills:
-- `story-completion` uses: `branch-naming`, `jira-updates`, `pr-creation`, `design-verification`
+- `mobile-ui-change` uses: `branch-naming`, `jira-updates`, `pr-creation`, `design-verification`, `release-notes`, `odc-testing`
 - Agents can call other agents for sub-workflows
+
+## Reference Documentation
+
+- **`docs/mobile-ui-lifecycle-reference.md`** - Complete lifecycle reference from TO DO to DONE, showing automation status and full workflow details
 
 ## Team/Project Overrides
 

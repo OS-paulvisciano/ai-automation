@@ -13,7 +13,6 @@
   - `skill:pr-creation` - For creating PR after testing (if needed)
 
 **Agents Used** (can call other agents):
-  - `agent:story-completion` - Can be used for complete story workflows
   - `agent:design-verification` - Can be used for design verification workflows
   - Other agents as needed for sub-workflows
 
@@ -577,8 +576,8 @@ If changes require platform-specific testing (Android/iOS):
 
 **When to Use Individual Skills/Agents**:
 - Single task (e.g., just create a branch → use `skill:branch-naming`)
-- Single workflow (e.g., just complete a story → use `agent:story-completion`)
-- Focused task (e.g., just verify design → use `skill:design-verification`)
+- Focused task (e.g., just verify design → use `skill:design-verification` or `agent:design-verification`)
+- Partial workflow (e.g., just Phase 1 implementation → use Phase 1 of this agent with `skip-odc-testing`)
 
 ## Related Skills
 
@@ -591,6 +590,9 @@ If changes require platform-specific testing (Android/iOS):
 
 ## Related Agents
 
-- `agent:story-completion` - Can be used for complete story workflows (branch → implement → document → PR)
 - `agent:design-verification` - Can be used for design verification workflows (Figma → compare → verify)
 - Other agents can be called as sub-workflows when needed
+
+## Reference Documentation
+
+- **`docs/mobile-ui-lifecycle-reference.md`** - Complete lifecycle reference from TO DO to DONE, showing automation status and full workflow details

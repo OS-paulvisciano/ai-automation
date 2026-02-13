@@ -1,10 +1,14 @@
-# TODO to DONE: Mobile UI Change Workflow
+# Mobile UI Lifecycle Reference: TODO to DONE
+
+> **Note**: This is a reference document, not an agent. For actual workflow automation, use `agent:mobile-ui-change`.
 
 **Example Story**: ROU-12461 - Card - Implement Android close button pressed state
 
-## Workflow Overview
+## Overview
 
-Complete journey from picking up a story in "TO DO" to moving it to "DONE", showing automated vs manual steps.
+This document provides a complete reference of the Mobile UI change workflow from picking up a story in "TO DO" to moving it to "DONE", showing automated vs manual steps. It serves as a comprehensive guide to understand the full lifecycle and automation status.
+
+**For workflow automation, use**: `agent:mobile-ui-change`
 
 ---
 
