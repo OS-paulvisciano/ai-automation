@@ -17,6 +17,7 @@ Skills are comprehensive rule documents that define how to perform specific task
 - **`jira-updates`** - Jira issue update conventions
 - **`branch-naming`** - Branch naming rules and conventions
 - **`design-verification`** - Figma/design token verification rules
+- **`odc-testing`** - ODC Studio testing workflow after XIF publishing
 
 ## Using Skills
 
