@@ -156,6 +156,17 @@ After connecting, test each MCP server:
   - Check that bot is added to the channel (`#rd-uicomponents-releases`)
   - Verify `channels:history` scope is enabled in Slack app settings
 
+### Atlassian MCP Timeout Issues
+
+The Atlassian MCP server experiences known timeout issues that affect various IDEs including Cursor, Claude Code, and Codex. This is a [known issue](https://community.atlassian.com/forums/Atlassian-Remote-MCP-Server/constant-authorization-timeouts/td-p/3177132) that Atlassian is actively working on.
+
+**Workaround:**
+If the MCP connection times out (typically after 30-55 minutes):
+1. Go to **Cursor Settings** → **Tools & MCP**
+2. Toggle the **Atlassian** server **OFF**
+3. Toggle the **Atlassian** server **ON** again
+4. The connection should be restored
+
 ### Browser MCP Flakiness
 
 Browser MCP can be unreliable. If issues persist:
