@@ -84,7 +84,7 @@ Use this skill after:
 - Test the complete workflow in ODC
 - Verify the XIF, widget library, and runtime components work together correctly
 - This ensures full integration, not just isolated component testing
-- **Why**: Catches integration issues that Storybook testing might miss
+- **Why**: Storybook tests widget layer + runtime integration (using actual runtime packages), but ODC testing verifies WidgetLibrary integration (labels, properties, design-time) and end-to-end ODC workflows
 
 #### 7. Document in Jira Story
 

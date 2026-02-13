@@ -148,8 +148,9 @@ ODC (uses Mobile UI via XIF files)
    - Builds StencilJS components into web components
    - Bundles for consumption by WidgetLibrary
 4. Run `npm run storybook` to verify in Storybook
-   - Storybook tests most of the stack (StencilJS → Ionic → Mobile UI)
-   - Does not test the ODC integration part
+   - Storybook tests most of the stack (StencilJS → Ionic → Mobile UI + Runtime integration)
+   - Uses actual runtime code (`@outsystems/runtime-core-js`, `@outsystems/runtime-view-js`)
+   - Does not test the ODC integration part (WidgetLibrary + ODC end-to-end)
 5. Commit changes to feature branch
 
 **Files Typically Modified**:
@@ -165,7 +166,7 @@ ODC (uses Mobile UI via XIF files)
 - **Platform Detection**: Ionic's platform detection used for Android/iOS specific styles
 - **ODC Integration**: Changes must work within ODC's consumption model (via XIF files)
 - **WidgetLibrary**: Controls how widgets appear in ODC (labels, properties, design-time experience)
-- **Runtime Logic**: Another team owns runtime logic (not tested in Storybook)
+- **Runtime Logic**: Storybook uses actual runtime code (`@outsystems/runtime-core-js`, `@outsystems/runtime-view-js`) and tests runtime integration (DataTypes, Widget, Model.Variable, etc.)
 
 **Design Verification** (if story has Figma file):
 - Use `skill:design-verification` to verify implementation matches Figma design
@@ -179,7 +180,7 @@ ODC (uses Mobile UI via XIF files)
 - Storybook tests pass (if applicable)
 - Changes match design requirements (verified via Figma if available)
 - Ionic dependencies are correctly used
-- **Note**: Storybook tests most of the stack (StencilJS → Ionic → Mobile UI) but not the ODC integration part
+- **Note**: Storybook tests most of the stack (StencilJS → Ionic → Mobile UI + Runtime integration using actual runtime packages) but not the ODC integration part (WidgetLibrary + ODC end-to-end)
 
 #### 1.3 Push Changes
 
@@ -378,26 +379,27 @@ ODC (uses Mobile UI via XIF files)
 - Enable fully automated testing workflow
 
 **Full Stack Testing**:
-- **Storybook**: Tests widget layer (StencilJS → Ionic → Mobile UI widgets)
+- **Storybook**: Tests widget layer (StencilJS → Ionic → Mobile UI widgets) + Runtime integration
   - ✅ Tests StencilJS compilation
   - ✅ Tests Ionic component rendering
   - ✅ Tests Mobile UI widget functionality
-  - ❌ Does NOT test Runtime logic (another team owns this)
+  - ✅ Tests Runtime integration (uses actual `@outsystems/runtime-core-js` and `@outsystems/runtime-view-js` packages)
+  - ✅ Tests runtime classes: DataTypes, Widget, WidgetHelpers, Model.Variable, Model.DummyViewModel
   - ❌ Does NOT test WidgetLibrary integration (ODC design-time experience)
   - ❌ Does NOT test ODC end-to-end integration
 - **ODC Testing**: Tests complete integration including:
   - ✅ Widget layer (already tested in Storybook)
-  - ✅ Runtime logic (not tested in Storybook)
+  - ✅ Runtime logic (already tested in Storybook via actual runtime packages)
   - ✅ WidgetLibrary integration (how widgets appear in ODC - labels, properties, etc.)
   - ✅ ODC end-to-end integration
-- **Why ODC Testing is Required**: Storybook tests the widget layer but not Runtime logic or WidgetLibrary/ODC integration
+- **Why ODC Testing is Required**: Storybook tests the widget layer and runtime integration, but not WidgetLibrary/ODC integration or end-to-end ODC workflows
 
 **Validation**:
 - App publishes successfully
 - Widget functionality works as expected
 - Full integration verified:
   - ✅ Widget layer (StencilJS → Ionic → Mobile UI) - already tested in Storybook
-  - ✅ Runtime logic integration
+  - ✅ Runtime logic integration - already tested in Storybook (uses actual runtime packages)
   - ✅ WidgetLibrary integration (labels, properties, design-time experience)
   - ✅ ODC end-to-end integration
 
@@ -550,9 +552,10 @@ If changes require platform-specific testing (Android/iOS):
 - **Slack Integration**: Manual posting required (automation coming soon)
 - **ODC Studio**: Can stay open during XIF preparation - no restart needed
 - **Testing**: Full integration testing in ODC is required (Storybook is not sufficient)
-  - Storybook tests widget layer (StencilJS → Ionic → Mobile UI widgets)
-  - Storybook does NOT test Runtime logic (another team owns this)
+  - Storybook tests widget layer (StencilJS → Ionic → Mobile UI widgets) + Runtime integration
+  - Storybook uses actual runtime code (`@outsystems/runtime-core-js`, `@outsystems/runtime-view-js`) and tests runtime integration (DataTypes, Widget, Model.Variable, etc.)
   - Storybook does NOT test WidgetLibrary integration (ODC design-time - labels, properties)
+  - Storybook does NOT test ODC end-to-end integration
   - ODC tests complete integration: widget layer + Runtime logic + WidgetLibrary + ODC end-to-end
 - **Ionic Dependencies**: Mobile UI widgets leverage Ionic components, CSS variables, and platform detection
 - **Mobile UI Enhancements**: Widgets include OutSystems-specific improvements and customizations over base Ionic
