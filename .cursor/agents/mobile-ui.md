@@ -1,7 +1,3 @@
----
-name: mobile-ui
-model: fast
----
 
 # Agent: Mobile UI
 
@@ -16,6 +12,7 @@ model: fast
   - `skill:release-notes` - For updating Release Notes field in Jira
   - `skill:odc-testing` - For complete ODC testing workflow
   - `skill:pr-creation` - For creating PR after testing (if needed)
+  - `skill:mobile-ui-prepare-xif-from-local` - For preparing the XIF for publishing from local (bundle widgets-js, update WidgetLibrary from local, run prepare-xif); delegates to repo agents. Publishing in ODC is manual and out of scope.
 
 **Agents Used** (delegates to repo-specific agents):
   - `agent:widgets-js` - For Phase 1 (implementation in runtime-mobile-widgets-js)
@@ -375,6 +372,9 @@ If changes are already consumed in WidgetLibrary:
 - Skip Phase 1 and Phase 2
 - Start at Phase 3 (Prepare and Publish XIF)
 
+### Prepare XIF from local
+Use `skill:mobile-ui-prepare-xif-from-local`. Delegate to agent:widgets-js (run skill:widgets-js-build), then to agent:widget-library (run skill:widget-library-update-widgets-js in local mode, then skill:widget-library-xif). User publishes the XIF in ODC Studio manually afterward.
+
 ### Browser Testing Only
 If changes don't require device-specific testing:
 - Skip native build in Phase 4
@@ -435,6 +435,7 @@ If changes require platform-specific testing (Android/iOS):
 - `skill:release-notes` - For updating Release Notes field in Jira
 - `skill:odc-testing` - For complete ODC testing workflow
 - `skill:pr-creation` - For creating PR after testing (if needed)
+- `skill:mobile-ui-prepare-xif-from-local` - For preparing the XIF for publishing from local (bundle widgets-js, update WidgetLibrary from local, run prepare-xif); delegates to repo agents. Publishing in ODC is manual and out of scope.
 
 ## Related Agents
 
