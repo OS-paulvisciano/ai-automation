@@ -8,10 +8,10 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 
 ## Structure
 
-**Shared Framework (symlinked to individual repos):**
-- **`.cursor/shared/skills/`** - Reusable task rules and guidelines (each skill is `shared/skills/<name>/SKILL.md`). Other repos get these by symlinking `.cursor/shared` to this repo's `.cursor/shared`.
+**Shared Framework (symlinked into other repos):**
+- **`.cursor/skills/shared/`** - Reusable task rules (PR creation, Jira updates, branch naming, etc.). Other repos get these by symlinking `.cursor/skills/shared` to this repo's `.cursor/skills/shared`.
+- **`.cursor/skills/`** - Agent-specific and repo-specific skills; `skills/shared/` = shared, other dirs (e.g. `mobile-ui-prepare-xif-from-local/`) = automation-repo or repo-specific
 - **`.cursor/agents/`** - Orchestrator agents (automation repo only)
-- **`.cursor/skills/`** - Agent-specific skills (automation repo only), e.g. prepare XIF from local
 - **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 
 **Automation Repo Only:**
@@ -134,7 +134,7 @@ After creating `~/.cursor/mcp.json`, you need to:
 
 Now that the automation framework is configured, use it to set up your project repositories. The setup script will:
 - Clone the project repository (or use existing if present)
-- Create symlink to automation framework in `.cursor/shared`
+- Create symlink to shared skills: `.cursor/skills/shared` → ai-automation's `.cursor/skills/shared`
 - Configure project-specific settings (npm authentication, etc.)
 
 **Available Projects:**
@@ -152,7 +152,7 @@ node scripts/setup-project.js widget-library
 
 The script will:
 1. Clone `OutSystems/OutSystems.WidgetLibrary` to `~/repos/OutSystems.WidgetLibrary` (or use existing)
-2. Create `.cursor/shared` symlink pointing to `.cursor/shared` in the automation framework
+2. Create `.cursor/skills/shared` symlink pointing to the automation repo's `.cursor/skills/shared`
 3. Prompt for Azure DevOps PAT if missing (saves to `.env` file)
 4. Configure npm authentication
 5. Set up `.npmrc` files
@@ -191,21 +191,21 @@ The framework uses a **priority-based override system** that allows customizatio
 Priority (Highest → Lowest):
 1. .cursor/ (in user's repo)                    # Repo-specific agents, skills, and overrides
 2. .cursor/teams/{team}/ (automation repo)       # Team-specific overrides
-3. .cursor/shared/skills/ (automation repo)      # Shared skills (org-level defaults)
+3. .cursor/skills/shared/ (automation repo or symlinked)  # Shared skills (org-level defaults)
 ```
 
 **How it works:**
-- **Shared skills** (`.cursor/shared/skills/`) provide org-wide standards for reusable tasks
+- **Shared skills** (`.cursor/skills/shared/`) provide org-wide standards for reusable tasks
 - **Orchestrator agents** (`.cursor/agents/`) coordinate workflows across repos (automation repo only)
 - **Team overrides** (`.cursor/teams/{team}/`) customize for specific teams (automation repo only)
 - **Repo-specific agents/skills** (`.cursor/agents/`, `.cursor/skills/` in individual repos) allow per-repo customizations
 - **Project configs** (`projects/{project}/config.json` in automation repo) are used by setup scripts, not directly by individual repos
 
 **Example:**
-If you're working on `runtime-mobile-widgets` project with `.cursor/shared/` symlink:
+If you're working on `runtime-mobile-widgets` project with `.cursor/skills/shared` symlink:
 1. AI looks for `.cursor/skills/pr-creation.md` in repo (if exists, use it)
 2. Else looks for `.cursor/teams/ui-components/skills/pr-creation.md` in automation repo (if exists, use it)
-3. Else uses `.cursor/shared/skills/pr-creation/SKILL.md` in automation repo (org default)
+3. Else uses `.cursor/skills/shared/pr-creation/SKILL.md` (org default, or via symlink)
 
 This allows teams to customize workflows while maintaining consistency across the organization.
 
@@ -213,9 +213,9 @@ This allows teams to customize workflows while maintaining consistency across th
 
 ### Adding New Skills
 
-1. Create `.cursor/shared/skills/{skill-name}/SKILL.md` (directory + SKILL.md with YAML frontmatter)
+1. Create `.cursor/skills/shared/{skill-name}/SKILL.md` (directory + SKILL.md with YAML frontmatter)
 2. Follow the skill template (see existing skills)
-3. Update `.cursor/shared/skills/README.md`
+3. Update `.cursor/skills/shared/README.md`
 4. Document dependencies and required MCPs
 
 ### Adding New Agents
@@ -241,7 +241,7 @@ Teams can override org-level skills/agents by creating:
 ```bash
 # Create team override (in automation repo)
 mkdir -p .cursor/teams/ui-components/skills
-cp .cursor/shared/skills/pr-creation/SKILL.md .cursor/teams/ui-components/skills/pr-creation.md
+cp .cursor/skills/shared/pr-creation/SKILL.md .cursor/teams/ui-components/skills/pr-creation.md
 # Edit to add team-specific rules
 ```
 
@@ -257,7 +257,7 @@ Projects can have specific configurations and overrides:
 ### Repo-Specific Customizations
 
 In individual repositories, create `.cursor/` folder with:
-- `shared/` - Symlink to `~/repos/ai-automation/.cursor/shared` (shared framework)
+- `skills/shared/` - Symlink to `~/repos/ai-automation/.cursor/skills/shared` (shared skills)
 - `plans/` - Repo-specific automation plans
 - `skills/` - Repo-specific skill overrides (optional)
 - `agents/` - Repo-specific agent overrides (optional)
@@ -282,8 +282,8 @@ These are never committed and take highest priority in that repo.
 - **[Complete Setup Guide](./docs/COMPLETE_SETUP_GUIDE.md)** - Step-by-step setup instructions (start here!)
 - [Infrastructure Setup](./infrastructure/README.md) - MCP server configuration details
 - [Automation Setup](./docs/AUTOMATION_SETUP.md) - Overview of automation workflows
-- [Skills Guide](./.cursor/shared/skills/README.md) - Available skills and how to use them
-- [Agents Guide](./.cursor/shared/agents/README.md) - Available workflows (note: orchestrator agents are in `.cursor/agents/`)
+- [Skills Guide](./.cursor/skills/shared/README.md) - Available skills and how to use them
+- [Agents Guide](./.cursor/agents/README.md) - Available workflows (orchestrator agents)
 - [Team Customization](./.cursor/teams/README.md) - How to customize for your team
 - [TODO](./TODO.md) - Future enhancements and improvements
 

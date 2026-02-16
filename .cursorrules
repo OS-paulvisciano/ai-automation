@@ -4,9 +4,9 @@ This repository contains shared AI automation rules, skills, and workflows for O
 
 ## Framework Structure
 
-- **`.cursor/shared/skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification) - **Shared across all repos**
+- **`.cursor/skills/shared/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification) - **Shared across all repos** (symlink into other repos)
 - **`.cursor/agents/`** - Orchestrator agents (automation repo only)
-- **`.cursor/skills/`** - Agent-specific skills (automation repo only), e.g. prepare XIF from local
+- **`.cursor/skills/`** - Agent-specific and repo-specific skills; `skills/shared/` = shared, other dirs = repo/agent-specific
 - **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 - **`infrastructure/`** - MCP server configurations (automation repo only)
 - **`projects/`** - Project-specific configurations (automation repo only)
@@ -16,11 +16,11 @@ This repository contains shared AI automation rules, skills, and workflows for O
 When the user requests automation tasks, use natural language and automatically identify which skills/agents to use from this framework.
 
 **Natural Language Examples:**
-- "Create a PR" → Use `.cursor/shared/skills/pr-creation/SKILL.md` rules
-- "Update the Jira story" → Use `.cursor/shared/skills/jira-updates/SKILL.md` rules
-- "Create a branch" → Use `.cursor/shared/skills/branch-naming/SKILL.md` rules
-- "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification/SKILL.md` rules
-- "Test in ODC" or "Create test app" → Use `.cursor/shared/skills/odc-testing/SKILL.md` rules
+- "Create a PR" → Use `.cursor/skills/shared/pr-creation/SKILL.md` rules
+- "Update the Jira story" → Use `.cursor/skills/shared/jira-updates/SKILL.md` rules
+- "Create a branch" → Use `.cursor/skills/shared/branch-naming/SKILL.md` rules
+- "Check if this matches Figma" → Use `.cursor/skills/shared/design-verification/SKILL.md` rules
+- "Test in ODC" or "Create test app" → Use `.cursor/skills/shared/odc-testing/SKILL.md` rules
 - "Prepare XIF from local", "XIF prepare", "prepare xif", or "Bundle and prepare XIF" → Use `.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md` (then delegate to repo agents)
 - "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/agents/mobile-ui.md` workflow
 
@@ -32,7 +32,7 @@ When resolving which rules to use, follow this priority order:
 
 1. `.cursor/` (in user's repo) - Repo-specific agents, skills, and overrides (highest priority)
 2. `.cursor/teams/{team}/` (in automation repo) - Team-specific overrides
-3. `.cursor/shared/skills/` (in automation repo) - Shared skills (lowest priority)
+3. `.cursor/skills/shared/` (in automation repo, or symlinked in other repos) - Shared skills (lowest priority)
 
 **Orchestrator Agents**: Located in automation repo `.cursor/agents/` (e.g., `mobile-ui.md`)
 **Agent-Specific Skills**: Located in automation repo `.cursor/skills/` (e.g., `mobile-ui-prepare-xif-from-local/SKILL.md`)
@@ -97,16 +97,16 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 - **Never commit credentials** - All credentials are in `.env` files (gitignored)
 - **Always validate** - Check that PR titles, branch names, etc. follow conventions
 - **Use natural language** - Infer which skill/agent to use from the user's request (no need for explicit prefixes)
-- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/shared/skills/` (shared skills), `.cursor/skills/` (agent-specific skills, automation repo), `.cursor/agents/` (orchestrator agents), or repo-specific `.cursor/agents/` or `.cursor/skills/` (repo agents/skills) and follow its rules
+- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/skills/shared/` (shared skills), `.cursor/skills/` (agent/repo-specific skills), `.cursor/agents/` (orchestrator agents), or repo-specific `.cursor/agents/` or `.cursor/skills/` (repo agents/skills) and follow its rules
 - **Use project configs** - Check `projects/{project}/config.json` in the automation repo for project-specific settings (Figma file keys, Jira projects, etc.)
 
 ## Examples
 
 **User**: "Create a PR for my changes"
-**AI**: Read `.cursor/shared/skills/pr-creation/SKILL.md` and follow those rules to create PR with proper title format, labels, and template sections.
+**AI**: Read `.cursor/skills/shared/pr-creation/SKILL.md` and follow those rules to create PR with proper title format, labels, and template sections.
 
 **User**: "Update the Jira story with what I did"
-**AI**: Read `.cursor/shared/skills/jira-updates/SKILL.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
+**AI**: Read `.cursor/skills/shared/jira-updates/SKILL.md` and follow those rules to update the "What I Did" section with implementation details and verification steps.
 
 **User**: "Complete story ROU-12345" or "End-to-end Mobile UI change"
 **AI**: Read `.cursor/agents/mobile-ui.md` (orchestrator) which delegates to:
@@ -115,6 +115,6 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
   - Then handles ODC testing, Jira updates, and PR creation
 
 **User**: "Check if my component matches Figma"
-**AI**: Read `.cursor/shared/skills/design-verification/SKILL.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
+**AI**: Read `.cursor/skills/shared/design-verification/SKILL.md` and follow those rules to fetch Figma specs, compare with codebase tokens, and flag any discrepancies.
 
 **Note**: The AI should automatically identify which skill/agent to use from natural language. No need for explicit prefixes unless the user uses them.

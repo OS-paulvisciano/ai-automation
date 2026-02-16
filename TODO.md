@@ -20,7 +20,7 @@ Implement Figma Code Connect to map design components to actual code components.
 2. Create mappings for key components (Card, Button, etc.)
 3. Add Code Connect configuration to project configs
 4. Update design verification skill to use Code Connect mappings
-5. Document usage in .cursor/shared/skills/design-verification/SKILL.md
+5. Document usage in .cursor/skills/shared/design-verification/SKILL.md
 
 ### Resources
 - [Code Connect UI Setup](https://developers.figma.com/docs/code-connect/code-connect-ui-setup/)
@@ -28,6 +28,6 @@ Implement Figma Code Connect to map design components to actual code components.
 - [Figma MCP Tools and Prompts](https://developers.figma.com/docs/figma-mcp-server/tools-and-prompts/)
 
 ### Related Files
-- `.cursor/shared/skills/design-verification/SKILL.md` - Will need updates to use Code Connect
+- `.cursor/skills/shared/design-verification/SKILL.md` - Will need updates to use Code Connect
 - `projects/runtime-mobile-widgets/config.json` - May need Code Connect mappings
 - `infrastructure/mcp-servers/figma.json` - May need Code Connect configuration

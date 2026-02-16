@@ -62,14 +62,14 @@ Each skill document includes:
 ## Adding New Skills
 
 **For Shared Skills** (used across all repos):
-1. Create `.cursor/shared/skills/{skill-name}/SKILL.md` in the automation repo (directory + SKILL.md)
+1. Create `.cursor/skills/shared/{skill-name}/SKILL.md` in the automation repo (directory + SKILL.md)
 2. Add YAML frontmatter to SKILL.md: `name` (lowercase, hyphens) and `description` (what it does + trigger phrases for Cursor discovery)
 3. Follow the skill template (see existing skills in each subdirectory)
 4. Update this README
 5. Document dependencies and required MCPs
 6. Include validation criteria and examples
 
-Repos using the framework see shared skills via the existing `.cursor/shared` symlink (no change to symlink needed).
+Other repos get shared skills by symlinking `.cursor/skills/shared` to this repo's `.cursor/skills/shared`.
 
 **For Agent-Specific Skills** (orchestrator-only, automation repo):
 1. Create `.cursor/skills/{skill-name}/SKILL.md` in the automation repo (directory + SKILL.md with frontmatter)
