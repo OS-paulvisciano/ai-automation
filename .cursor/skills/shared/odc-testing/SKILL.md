@@ -18,7 +18,22 @@ Use this skill after:
 - You need to test widget changes in a full integration environment
 - You need to create/update a test app for verification
 
-### Complete ODC Testing Workflow
+### End-to-end ODC steps (order matters)
+
+1. **Prepare the XIF** (e.g. via `skill:mobile-ui-prepare-xif-from-local`).
+2. **Publish the XIF** in ODC Studio (Support → Publish XIF; manual).
+3. **Create a new app** in ODC (or use an existing one).
+4. **Update dependencies** so the app pulls in the latest XIF (verify under Themes > MobileUI).
+5. **Create the sample** so it demonstrates the new behavior (e.g. drag the widget onto Home, configure to show the feature).
+6. **Publish the app** using the **Publish** button in ODC.
+7. **After publish**, the button becomes **Open in browser**. That opens the preview URL:
+   - `https://eng-starter-apps.outsystems.dev/preview/application?id={appId}&stageid={stageId}&screen=Home`
+8. **Shareable shorter link** for the same app in the browser:
+   - `https://eng-starter-apps-dev.outsystems.app/{appSlug}` (app slug has no hyphens, e.g. `ROU12461androidclsbtn`).
+9. **Native binary (when needed):** Create it from the app’s mobile distribution page:
+   - `https://eng-starter-apps.outsystems.dev/apps/application?id={appId}&stageid={stageId}&tab=mobiledistribution&mobileoption=android` (use `mobileoption=ios` for iOS).
+
+### Complete ODC Testing Workflow (detailed)
 
 #### 1. Create/Update Test App in ODC
 
@@ -68,15 +83,13 @@ Use this skill after:
 #### 5. Publish the App
 
 **Steps:**
-- Click **"Publish"** in ODC Studio
-- This makes the app available for browser testing
-- Use **"Open in browser"** to test the functionality
+- Click **"Publish"** in ODC Studio. After publishing, the button changes to **"Open in browser"**.
+- **Open in browser** opens: `https://eng-starter-apps.outsystems.dev/preview/application?id={appId}&stageid={stageId}&screen=Home`
+- The app is also viewable via the shorter shareable link: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` (slug has no hyphens).
 
-**Native Build (when required):**
-- Some stories require native builds (e.g., Android-specific styles, iOS-specific features)
-- Use the native build option in ODC Studio
-- Test on actual device to verify platform-specific behavior
-- **When to use**: Device-specific styling, native gestures, platform APIs
+**Native binary (final step when required):**
+- Create the native binary from: `https://eng-starter-apps.outsystems.dev/apps/application?id={appId}&stageid={stageId}&tab=mobiledistribution&mobileoption=android` (or `mobileoption=ios`).
+- Some stories require native builds (e.g., Android-specific styles). Test on actual device to verify.
 
 **Browser Testing (when sufficient):**
 - For general UI changes, browser testing is sufficient
@@ -115,11 +128,12 @@ Use this skill after:
 ```
 Test app created and published:
 - App Name: ROU-12461-android-cls-btn
-- Location: [ODC environment URL]
+- Shareable URL: https://eng-starter-apps-dev.outsystems.app/ROU12461androidclsbtn
 - Version: 1.0.380
 
 Ready for verification. The app includes a Card component with the new Android close button styling. 
 Test by opening the app and dismissing the card to see the pressed state.
+For native Android build: use ODC app page → Mobile Distribution → Android.
 ```
 
 ## Validation Criteria
