@@ -49,7 +49,7 @@ flowchart LR
 
 ## 1. Create the new skill file
 
-**Path**: [ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local.md](ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local.md)
+**Path**: [ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md](ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md)
 
 Create the `.cursor/skills/` folder in the ai-automation repo if it does not exist. This skill is specific to the mobile-ui agent, not shared across repos.
 
@@ -85,7 +85,7 @@ Do not add a fallback that runs the underlying npm commands directly; the skill 
 
 | Action | File                                                                                                                                                                                                                                                                                                                            |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Create | [ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local.md](ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local.md) — agent-specific skill; create .cursor/skills/ if needed; orchestration by skill-level delegation (widgets-js-build, then widget-library-update-widgets-js local, then widget-library-xif) |
+| Create | [ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md](ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md) — agent-specific skill; create .cursor/skills/ if needed; orchestration by skill-level delegation (widgets-js-build, then widget-library-update-widgets-js local, then widget-library-xif) |
 | Edit   | [ai-automation/.cursor/agents/mobile-ui.md](ai-automation/.cursor/agents/mobile-ui.md) — add skill to Skills Used and Related Skills; add Local XIF pipeline to Common Workflows                                                                                                                                                |
 
 

@@ -26,7 +26,7 @@ Skills are comprehensive rule documents that define how to perform specific task
 
 Orchestrator-only skills live in the automation repo at `.cursor/skills/` (not shared across repos):
 
-- **`skill:mobile-ui-prepare-xif-from-local`** - Located in `ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local.md`
+- **`skill:mobile-ui-prepare-xif-from-local`** - Located in `ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md`
   - Prepares the XIF for publishing from local: bundle widgets-js, update WidgetLibrary from local, run prepare-xif. Delegates to agent:widgets-js (skill:widgets-js-build) then agent:widget-library (skill:widget-library-update-widgets-js local, skill:widget-library-xif). ODC publishing is manual and out of scope.
 
 ### Repository-Specific Skills
@@ -48,7 +48,7 @@ Reference skills in your AI prompts:
 - "Follow skill:pr-creation"
 - "Use skill:jira-updates to update story ROU-12345"
 - "Apply skill:branch-naming rules"
-- "Prepare XIF from local" or "Bundle and prepare XIF" → Use `skill:mobile-ui-prepare-xif-from-local` (automation repo `.cursor/skills/`)
+- "Prepare XIF from local", "XIF prepare", "prepare xif", or "Bundle and prepare XIF" → Use `skill:mobile-ui-prepare-xif-from-local` (automation repo `.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md`)
 
 ## Skill Structure
 
@@ -62,14 +62,17 @@ Each skill document includes:
 ## Adding New Skills
 
 **For Shared Skills** (used across all repos):
-1. Create `.cursor/shared/skills/{skill-name}.md` in the automation repo
-2. Follow the skill template (see existing skills)
-3. Update this README
-4. Document dependencies and required MCPs
-5. Include validation criteria and examples
+1. Create `.cursor/shared/skills/{skill-name}/SKILL.md` in the automation repo (directory + SKILL.md)
+2. Add YAML frontmatter to SKILL.md: `name` (lowercase, hyphens) and `description` (what it does + trigger phrases for Cursor discovery)
+3. Follow the skill template (see existing skills in each subdirectory)
+4. Update this README
+5. Document dependencies and required MCPs
+6. Include validation criteria and examples
+
+Repos using the framework see shared skills via the existing `.cursor/shared` symlink (no change to symlink needed).
 
 **For Agent-Specific Skills** (orchestrator-only, automation repo):
-1. Create `.cursor/skills/{skill-name}.md` in the automation repo
+1. Create `.cursor/skills/{skill-name}/SKILL.md` in the automation repo (directory + SKILL.md with frontmatter)
 2. Document that it's used by an orchestrator agent (e.g. mobile-ui)
 3. Update this README
 
@@ -88,7 +91,7 @@ Some skills depend on others:
 ## Team/Project Overrides
 
 Teams can override org-level skills:
-- `.cursor/teams/{team}/skills/{skill-name}.md` - Team override (in automation repo)
+- `.cursor/teams/{team}/skills/{skill-name}.md` - Team override (in automation repo; single file)
 
 **Note:** Project overrides are not accessible via symlink (projects folder is automation-repo-only).
 

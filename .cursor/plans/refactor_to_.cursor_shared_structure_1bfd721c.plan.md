@@ -29,6 +29,7 @@ todos:
   - id: test-symlink
     content: Test that symlink works correctly in a sample repo and Cursor can read from `.cursor/shared/`
     status: completed
+isProject: false
 ---
 
 # Refactor Framework to `.cursor/shared/` Structure
@@ -200,22 +201,23 @@ These may reference other skills/agents or project configs.
 After changes, verify that:
 
 - Individual repos can symlink `.cursor/shared` → `~/repos/ai-automation/.cursor/shared`
-- Paths resolve correctly: `.cursor/shared/skills/pr-creation.md`
+- Paths resolve correctly: `.cursor/shared/skills/pr-creation/SKILL.md`
 - `.cursorrules` in repos can reference `.cursor/shared/skills/` correctly
 
 ## Testing Checklist
 
-- [ ] All folders moved successfully
-- [ ] `.cursorrules` updated and paths work
-- [ ] `setup-project.js` creates correct symlink to `.cursor/shared`
-- [ ] `setup-mcp.js` still finds config template at root `infrastructure/` location
-- [ ] All documentation updated
-- [ ] Test symlink in a sample repo
-- [ ] Verify Cursor can read skills from `.cursor/shared/skills/`
-- [ ] Verify MCP config generation still works
+- All folders moved successfully
+- `.cursorrules` updated and paths work
+- `setup-project.js` creates correct symlink to `.cursor/shared`
+- `setup-mcp.js` still finds config template at root `infrastructure/` location
+- All documentation updated
+- Test symlink in a sample repo
+- Verify Cursor can read skills from `.cursor/shared/skills/`
+- Verify MCP config generation still works
 
 ## Migration Notes
 
 - Existing repos with old symlinks will need to update their symlinks
 - Users may need to re-run `setup-project.js` or manually update symlinks
 - Consider adding a migration note in README for existing users
+

@@ -6,7 +6,7 @@ Thank you for contributing to the AI Automation Framework!
 
 ### Adding New Skills
 
-1. Create `.cursor/shared/skills/{skill-name}.md`
+1. Create `.cursor/shared/skills/{skill-name}/SKILL.md` (directory + SKILL.md with YAML frontmatter)
 2. Follow the structure of existing skills:
    - Metadata (ID, version, dependencies, MCPs)
    - Rules and conventions

@@ -1,3 +1,8 @@
+---
+name: mobile-ui-prepare-xif-from-local
+description: Orchestrates preparing the XIF for publishing from local changes (bundle widgets-js, update WidgetLibrary from local, run prepare-xif). Use when the user says prepare XIF, xif prepare, bundle and prepare XIF, or wants to get the XIF ready for publishing from local. Delegates to agent:widgets-js and agent:widget-library.
+---
+
 # Skill: Mobile-UI Prepare XIF From Local
 
 **ID**: `skill:mobile-ui-prepare-xif-from-local`  
@@ -16,6 +21,7 @@ Orchestrate **preparing the XIF for publishing** from local changes: bundle widg
 Use this skill when the user wants to prepare the XIF from local, for example:
 
 - "Prepare XIF from local"
+- "XIF prepare" / "prepare xif"
 - "Prepare XIF with my local widgets-js"
 - "Bundle and prepare XIF"
 - "Get the XIF ready for publishing from local"

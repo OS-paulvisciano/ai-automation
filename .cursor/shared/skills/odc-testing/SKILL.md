@@ -1,3 +1,8 @@
+---
+name: odc-testing
+description: Guides ODC Studio test app workflow after XIF publishing (create app, verify version, test widget, document in Jira). Use when the user says test in ODC, create test app, ODC testing, or wants to test after publishing XIF.
+---
+
 # Skill: ODC Testing
 
 **ID**: `skill:odc-testing`  

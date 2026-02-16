@@ -1,3 +1,8 @@
+---
+name: pr-creation
+description: Creates pull requests with required PR title format, labels, and template sections. Use when the user says create PR, open PR, make a PR, or wants to create a pull request.
+---
+
 # Skill: PR Creation
 
 **ID**: `skill:pr-creation`  

@@ -1,3 +1,8 @@
+---
+name: design-verification
+description: Verifies UI implementation against Figma specs and design tokens. Use when the user says match Figma, design check, verify design, or wants to compare code to Figma.
+---
+
 # Skill: Design Verification
 
 **ID**: `skill:design-verification`  

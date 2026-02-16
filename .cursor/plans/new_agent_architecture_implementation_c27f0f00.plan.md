@@ -2,6 +2,7 @@
 name: ""
 overview: ""
 todos: []
+isProject: false
 ---
 
 # New Agent Architecture Implementation Plan
@@ -278,20 +279,20 @@ agent:mobile-ui-change (orchestrator)
 
 1. ✅ **Remove single-task agents** (`agent:design-verification`, `agent:pr-creation`) - COMPLETED
 2. **Create agent-specific skills** (`widgets-js-build`, `widget-library-xif`)
-3. **Create `agent:widgets-js`** (extract Phase 1 from mobile-ui-change)
-4. **Create `agent:widget-library`** (extract Phase 2 & 3 from mobile-ui-change)
-5. **Refactor `agent:mobile-ui-change`** (remove implementation details, add delegation, remove agent references)
+3. **Create `agent:widgets-js**` (extract Phase 1 from mobile-ui-change)
+4. **Create `agent:widget-library**` (extract Phase 2 & 3 from mobile-ui-change)
+5. **Refactor `agent:mobile-ui-change**` (remove implementation details, add delegation, remove agent references)
 6. **Update documentation** (READMEs, .cursorrules, lifecycle reference) - Remove references to deleted agents
 7. **Test workflow** (verify delegation works correctly)
 
 ## Validation Criteria
 
-- [ ] `agent:widgets-js` can be used standalone
-- [ ] `agent:widget-library` can be used standalone
-- [ ] `agent:mobile-ui-change` successfully delegates to repo agents
-- [ ] All shared skills work across agents
-- [ ] Agent-specific skills only used by relevant agents
-- [ ] Documentation updated and accurate
+- `agent:widgets-js` can be used standalone
+- `agent:widget-library` can be used standalone
+- `agent:mobile-ui-change` successfully delegates to repo agents
+- All shared skills work across agents
+- Agent-specific skills only used by relevant agents
+- Documentation updated and accurate
 
 ## Files to Create
 
@@ -324,3 +325,4 @@ agent:mobile-ui-change (orchestrator)
 - Agent-specific skills follow same structure as shared skills
 - Future phases can be implemented incrementally without breaking existing agents
 - `agent:mobile-ui-change` is refactored to pure orchestrator - no need to maintain old implementation details
+

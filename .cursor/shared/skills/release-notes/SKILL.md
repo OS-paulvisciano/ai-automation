@@ -1,3 +1,8 @@
+---
+name: release-notes
+description: Writes and updates release notes in Jira (custom field, user-focused, ADF format). Use when the user says release notes, RN, Confluence, or wants to add release notes to a story.
+---
+
 # Skill: Release Notes
 
 **ID**: `skill:release-notes`  

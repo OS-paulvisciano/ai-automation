@@ -1,3 +1,8 @@
+---
+name: branch-naming
+description: Enforces branch naming rules (ROU-XXXX format, no prefix or suffix). Use when the user says create branch, branch name, new branch, or wants to create a feature branch.
+---
+
 # Skill: Branch Naming
 
 **ID**: `skill:branch-naming`  

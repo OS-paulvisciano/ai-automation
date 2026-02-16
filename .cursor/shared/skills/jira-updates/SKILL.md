@@ -1,3 +1,8 @@
+---
+name: jira-updates
+description: Updates Jira issues including "What I Did" format and verification steps. Use when the user says update Jira, update story, what I did, or wants to update a Jira story.
+---
+
 # Skill: Jira Updates
 
 **ID**: `skill:jira-updates`  

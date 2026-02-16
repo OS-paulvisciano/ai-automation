@@ -9,7 +9,7 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 ## Structure
 
 **Shared Framework (symlinked to individual repos):**
-- **`.cursor/shared/skills/`** - Reusable task rules and guidelines (PR creation, Jira updates, etc.)
+- **`.cursor/shared/skills/`** - Reusable task rules and guidelines (each skill is `shared/skills/<name>/SKILL.md`). Other repos get these by symlinking `.cursor/shared` to this repo's `.cursor/shared`.
 - **`.cursor/agents/`** - Orchestrator agents (automation repo only)
 - **`.cursor/skills/`** - Agent-specific skills (automation repo only), e.g. prepare XIF from local
 - **`.cursor/teams/`** - Team-specific overrides (automation repo only)
@@ -205,7 +205,7 @@ Priority (Highest → Lowest):
 If you're working on `runtime-mobile-widgets` project with `.cursor/shared/` symlink:
 1. AI looks for `.cursor/skills/pr-creation.md` in repo (if exists, use it)
 2. Else looks for `.cursor/teams/ui-components/skills/pr-creation.md` in automation repo (if exists, use it)
-3. Else uses `.cursor/shared/skills/pr-creation.md` in automation repo (org default)
+3. Else uses `.cursor/shared/skills/pr-creation/SKILL.md` in automation repo (org default)
 
 This allows teams to customize workflows while maintaining consistency across the organization.
 
@@ -213,7 +213,7 @@ This allows teams to customize workflows while maintaining consistency across th
 
 ### Adding New Skills
 
-1. Create `.cursor/shared/skills/{skill-name}.md`
+1. Create `.cursor/shared/skills/{skill-name}/SKILL.md` (directory + SKILL.md with YAML frontmatter)
 2. Follow the skill template (see existing skills)
 3. Update `.cursor/shared/skills/README.md`
 4. Document dependencies and required MCPs
@@ -241,7 +241,7 @@ Teams can override org-level skills/agents by creating:
 ```bash
 # Create team override (in automation repo)
 mkdir -p .cursor/teams/ui-components/skills
-cp .cursor/shared/skills/pr-creation.md .cursor/teams/ui-components/skills/pr-creation.md
+cp .cursor/shared/skills/pr-creation/SKILL.md .cursor/teams/ui-components/skills/pr-creation.md
 # Edit to add team-specific rules
 ```
 
