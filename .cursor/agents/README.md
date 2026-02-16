@@ -13,24 +13,20 @@ Agents are workflow definitions that orchestrate multiple skills to complete end
 
 ## Available Agents
 
-### Orchestrator Agents
+### All Agents (Automation Repo)
 
-**Note**: Orchestrator agents are located in the automation repo at `.cursor/agents/`, not in shared.
+All agents are in the automation repo at `.cursor/agents/`:
 
-- **`mobile-ui`** - Located in `.cursor/agents/mobile-ui.md` (automation repo)
-  - End-to-end Mobile UI workflow orchestrator (delegates to repo-specific agents)
+- **`mobile-ui`** - `.cursor/agents/mobile-ui.md`
+  - End-to-end Mobile UI workflow orchestrator (delegates to widgets-js and widget-library agents)
   - **Primary agent for Mobile UI work**
-  - **Prepare XIF from local**: Use `skill:mobile-ui-prepare-xif-from-local` (in `.cursor/skills/`) to bundle widgets-js, update WidgetLibrary from local, and run prepare-xif; delegates to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF). ODC publishing is manual.
+  - **Prepare XIF from local**: Use `skill:mobile-ui-prepare-xif-from-local`; delegates to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF). ODC publishing is manual.
 
-### Repository-Specific Agents
-
-Repository-specific agents are located in their respective repositories:
-
-- **`agent:widgets-js`** - Located in `runtime-mobile-widgets-js/.cursor/agents/widgets-js.md`
-  - Handles implementation workflow for widgets-js repository
+- **`agent:widgets-js`** - `.cursor/agents/widgets-js.md`
+  - Handles implementation workflow for the widgets-js repository
   - Branch creation, implementation, Storybook testing, build, commit/push
 
-- **`agent:widget-library`** - Located in `OutSystems.WidgetLibrary/.cursor/agents/widget-library.md`
+- **`agent:widget-library`** - `.cursor/agents/widget-library.md`
   - Handles WidgetLibrary consumption and XIF preparation
   - Branch creation, update widgets-js in WidgetLibrary (npm or local), prepare XIF, coordinate publishing
 

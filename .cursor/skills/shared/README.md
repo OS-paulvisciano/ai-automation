@@ -22,23 +22,19 @@ Skills are comprehensive rule documents that define how to perform specific task
 - **`release-notes`** - Release notes update conventions
 - **`odc-testing`** - ODC Studio testing workflow after XIF publishing
 
-### Agent-Specific Skills (Automation Repo)
+### All Other Skills (Automation Repo)
 
-Orchestrator-only skills live in the automation repo at `.cursor/skills/` (not shared across repos):
+All skills live in the automation repo at `.cursor/skills/`. Shared skills are in `shared/` (symlinked into other repos); the rest are used when working with the corresponding repo or agent.
 
-- **`skill:mobile-ui-prepare-xif-from-local`** - Located in `ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md`
+- **`skill:mobile-ui-prepare-xif-from-local`** - `ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md`
   - Prepares the XIF for publishing from local: bundle widgets-js, update WidgetLibrary from local, run prepare-xif. Delegates to agent:widgets-js (skill:widgets-js-build) then agent:widget-library (skill:widget-library-update-widgets-js local, skill:widget-library-xif). ODC publishing is manual and out of scope.
 
-### Repository-Specific Skills
-
-Repository-specific skills are located in their respective repositories:
-
-- **widgets-js** (`runtime-mobile-widgets-js/.cursor/skills/`):
+- **widgets-js** (automation repo `.cursor/skills/`):
   - **`skill:widgets-js-build`** - Production bundle (Rollup, dist validation)
   - **`skill:widgets-js-storybook`** - Run Storybook dev server (Vite, port 6006)
   - **`skill:widgets-js-tests`** - Run Vitest (unit and Storybook projects)
 
-- **WidgetLibrary** (`OutSystems.WidgetLibrary/.cursor/skills/`):
+- **WidgetLibrary** (automation repo `.cursor/skills/`):
   - **`skill:widget-library-update-widgets-js`** - Update widgets-js in WidgetLibrary (npm or local copy)
   - **`skill:widget-library-xif`** - XIF preparation (version bump, build, copy to ODC plugins). ODC publishing is manual.
 
@@ -76,10 +72,10 @@ Other repos get shared skills by symlinking `.cursor/skills/shared` to this repo
 2. Document that it's used by an orchestrator agent (e.g. mobile-ui)
 3. Update this README
 
-**For Repository-Specific Skills**:
-1. Create `.cursor/skills/{skill-name}.md` in the target repository
+**For repo/agent-specific skills** (widgets-js, widget-library, etc.):
+1. Create `.cursor/skills/{skill-name}/SKILL.md` in the **automation repo** (directory + SKILL.md with YAML frontmatter)
 2. Follow the skill template (see existing skills)
-3. Document that it's repo-specific
+3. Document which repo/agent the skill applies to
 4. Reference shared skills when needed
 
 ## Skill Dependencies

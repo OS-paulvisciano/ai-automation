@@ -5,8 +5,8 @@ This repository contains shared AI automation rules, skills, and workflows for O
 ## Framework Structure
 
 - **`.cursor/skills/shared/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification) - **Shared across all repos** (symlink into other repos)
-- **`.cursor/agents/`** - Orchestrator agents (automation repo only)
-- **`.cursor/skills/`** - Agent-specific and repo-specific skills; `skills/shared/` = shared, other dirs = repo/agent-specific
+- **`.cursor/agents/`** - All agents (mobile-ui orchestrator, widgets-js, widget-library) — automation repo only
+- **`.cursor/skills/`** - All skills: `skills/shared/` = shared (symlink into other repos), other dirs = widgets-js, widget-library, mobile-ui
 - **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 - **`infrastructure/`** - MCP server configurations (automation repo only)
 - **`projects/`** - Project-specific configurations (automation repo only)
@@ -34,9 +34,7 @@ When resolving which rules to use, follow this priority order:
 2. `.cursor/teams/{team}/` (in automation repo) - Team-specific overrides
 3. `.cursor/skills/shared/` (in automation repo, or symlinked in other repos) - Shared skills (lowest priority)
 
-**Orchestrator Agents**: Located in automation repo `.cursor/agents/` (e.g., `mobile-ui.md`)
-**Agent-Specific Skills**: Located in automation repo `.cursor/skills/` (e.g., `mobile-ui-prepare-xif-from-local/SKILL.md`)
-**Repository-Specific Agents/Skills**: Located in their respective repos (e.g., `runtime-mobile-widgets-js/.cursor/agents/`, `OutSystems.WidgetLibrary/.cursor/skills/`)
+**All agents and skills** live in the automation repo: `.cursor/agents/` (mobile-ui.md, widgets-js.md, widget-library.md) and `.cursor/skills/` (shared/, mobile-ui-prepare-xif-from-local/, widgets-js-*, widget-library-*). Other repos get shared skills via symlink `.cursor/skills/shared` only.
 
 ## Key Rules
 
@@ -73,12 +71,12 @@ When resolving which rules to use, follow this priority order:
 - Handles cross-repo coordination and ODC testing
 - Most comprehensive agent for Mobile UI work
 
-### Repository-Specific Agents
-- **`agent:widgets-js`** - Located in `runtime-mobile-widgets-js/.cursor/agents/`
+### Widgets-JS and Widget-Library Agents
+- **`agent:widgets-js`** - Located in `.cursor/agents/widgets-js.md` (automation repo)
   - Handles implementation workflow for widgets-js repository
   - Can be used standalone or as part of orchestrator workflow
 
-- **`agent:widget-library`** - Located in `OutSystems.WidgetLibrary/.cursor/agents/`
+- **`agent:widget-library`** - Located in `.cursor/agents/widget-library.md` (automation repo)
   - Handles WidgetLibrary consumption and XIF preparation
   - Can be used standalone or as part of orchestrator workflow
 
@@ -97,7 +95,7 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 - **Never commit credentials** - All credentials are in `.env` files (gitignored)
 - **Always validate** - Check that PR titles, branch names, etc. follow conventions
 - **Use natural language** - Infer which skill/agent to use from the user's request (no need for explicit prefixes)
-- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/skills/shared/` (shared skills), `.cursor/skills/` (agent/repo-specific skills), `.cursor/agents/` (orchestrator agents), or repo-specific `.cursor/agents/` or `.cursor/skills/` (repo agents/skills) and follow its rules
+- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/skills/shared/` (shared skills), `.cursor/skills/` (all other skills), or `.cursor/agents/` (all agents) and follow its rules
 - **Use project configs** - Check `projects/{project}/config.json` in the automation repo for project-specific settings (Figma file keys, Jira projects, etc.)
 
 ## Examples
@@ -110,8 +108,8 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 
 **User**: "Complete story ROU-12345" or "End-to-end Mobile UI change"
 **AI**: Read `.cursor/agents/mobile-ui.md` (orchestrator) which delegates to:
-  - `runtime-mobile-widgets-js/.cursor/agents/widgets-js.md` (Phase 1)
-  - `OutSystems.WidgetLibrary/.cursor/agents/widget-library.md` (Phase 2 & 3)
+  - `.cursor/agents/widgets-js.md` (Phase 1)
+  - `.cursor/agents/widget-library.md` (Phase 2 & 3)
   - Then handles ODC testing, Jira updates, and PR creation
 
 **User**: "Check if my component matches Figma"
