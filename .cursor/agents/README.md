@@ -20,6 +20,7 @@ Agents are workflow definitions that orchestrate multiple skills to complete end
 - **`mobile-ui`** - Located in `.cursor/agents/mobile-ui.md` (automation repo)
   - End-to-end Mobile UI workflow orchestrator (delegates to repo-specific agents)
   - **Primary agent for Mobile UI work**
+  - **Prepare XIF from local**: Use `skill:mobile-ui-prepare-xif-from-local` (in `.cursor/skills/`) to bundle widgets-js, update WidgetLibrary from local, and run prepare-xif; delegates to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF). ODC publishing is manual.
 
 ### Repository-Specific Agents
 
@@ -31,7 +32,7 @@ Repository-specific agents are located in their respective repositories:
 
 - **`agent:widget-library`** - Located in `OutSystems.WidgetLibrary/.cursor/agents/widget-library.md`
   - Handles WidgetLibrary consumption and XIF preparation
-  - Branch creation, update runtime widgets, prepare XIF, coordinate publishing
+  - Branch creation, update widgets-js in WidgetLibrary (npm or local), prepare XIF, coordinate publishing
 
 **Note**: `design-verification` and `pr-creation` are skills only, not agents. Agents orchestrate multi-step workflows across repos/domains, while skills are single tasks.
 
@@ -39,6 +40,7 @@ Repository-specific agents are located in their respective repositories:
 
 Reference agents in your AI prompts:
 - "Run agent:mobile-ui for story ROU-12345" (primary orchestrator for Mobile UI work)
+- "Prepare XIF from local" (use `skill:mobile-ui-prepare-xif-from-local` — bundle, update WidgetLibrary from local, run prepare-xif)
 - "Use agent:widgets-js for story ROU-12345" (repo-specific agent for widgets-js work)
 - "Use agent:widget-library for story ROU-12345" (repo-specific agent for WidgetLibrary work)
 

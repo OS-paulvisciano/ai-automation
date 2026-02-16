@@ -22,17 +22,25 @@ Skills are comprehensive rule documents that define how to perform specific task
 - **`release-notes`** - Release notes update conventions
 - **`odc-testing`** - ODC Studio testing workflow after XIF publishing
 
+### Agent-Specific Skills (Automation Repo)
+
+Orchestrator-only skills live in the automation repo at `.cursor/skills/` (not shared across repos):
+
+- **`skill:mobile-ui-prepare-xif-from-local`** - Located in `ai-automation/.cursor/skills/mobile-ui-prepare-xif-from-local.md`
+  - Prepares the XIF for publishing from local: bundle widgets-js, update WidgetLibrary from local, run prepare-xif. Delegates to agent:widgets-js (skill:widgets-js-build) then agent:widget-library (skill:widget-library-update-widgets-js local, skill:widget-library-xif). ODC publishing is manual and out of scope.
+
 ### Repository-Specific Skills
 
 Repository-specific skills are located in their respective repositories:
 
-- **`skill:widgets-js-build`** - Located in `runtime-mobile-widgets-js/.cursor/skills/widgets-js-build.md`
-  - Build and bundle workflows for widgets-js repository
-  - Storybook testing procedures, build validation
+- **widgets-js** (`runtime-mobile-widgets-js/.cursor/skills/`):
+  - **`skill:widgets-js-build`** - Production bundle (Rollup, dist validation)
+  - **`skill:widgets-js-storybook`** - Run Storybook dev server (Vite, port 6006)
+  - **`skill:widgets-js-tests`** - Run Vitest (unit and Storybook projects)
 
-- **`skill:widget-library-xif`** - Located in `OutSystems.WidgetLibrary/.cursor/skills/widget-library-xif.md`
-  - XIF preparation workflow for WidgetLibrary
-  - Version bumping, XIF file generation, manual publishing steps
+- **WidgetLibrary** (`OutSystems.WidgetLibrary/.cursor/skills/`):
+  - **`skill:widget-library-update-widgets-js`** - Update widgets-js in WidgetLibrary (npm or local copy)
+  - **`skill:widget-library-xif`** - XIF preparation (version bump, build, copy to ODC plugins). ODC publishing is manual.
 
 ## Using Skills
 
@@ -40,6 +48,7 @@ Reference skills in your AI prompts:
 - "Follow skill:pr-creation"
 - "Use skill:jira-updates to update story ROU-12345"
 - "Apply skill:branch-naming rules"
+- "Prepare XIF from local" or "Bundle and prepare XIF" → Use `skill:mobile-ui-prepare-xif-from-local` (automation repo `.cursor/skills/`)
 
 ## Skill Structure
 
@@ -58,6 +67,11 @@ Each skill document includes:
 3. Update this README
 4. Document dependencies and required MCPs
 5. Include validation criteria and examples
+
+**For Agent-Specific Skills** (orchestrator-only, automation repo):
+1. Create `.cursor/skills/{skill-name}.md` in the automation repo
+2. Document that it's used by an orchestrator agent (e.g. mobile-ui)
+3. Update this README
 
 **For Repository-Specific Skills**:
 1. Create `.cursor/skills/{skill-name}.md` in the target repository

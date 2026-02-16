@@ -6,6 +6,7 @@ This repository contains shared AI automation rules, skills, and workflows for O
 
 - **`.cursor/shared/skills/`** - Reusable task rules (PR creation, Jira updates, branch naming, design verification) - **Shared across all repos**
 - **`.cursor/agents/`** - Orchestrator agents (automation repo only)
+- **`.cursor/skills/`** - Agent-specific skills (automation repo only), e.g. prepare XIF from local
 - **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 - **`infrastructure/`** - MCP server configurations (automation repo only)
 - **`projects/`** - Project-specific configurations (automation repo only)
@@ -20,6 +21,7 @@ When the user requests automation tasks, use natural language and automatically 
 - "Create a branch" → Use `.cursor/shared/skills/branch-naming.md` rules
 - "Check if this matches Figma" → Use `.cursor/shared/skills/design-verification.md` rules
 - "Test in ODC" or "Create test app" → Use `.cursor/shared/skills/odc-testing.md` rules
+- "Prepare XIF from local" or "Bundle and prepare XIF" → Use `.cursor/skills/mobile-ui-prepare-xif-from-local.md` (then delegate to repo agents)
 - "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/agents/mobile-ui.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
@@ -32,7 +34,8 @@ When resolving which rules to use, follow this priority order:
 2. `.cursor/teams/{team}/` (in automation repo) - Team-specific overrides
 3. `.cursor/shared/skills/` (in automation repo) - Shared skills (lowest priority)
 
-**Orchestrator Agents**: Located in automation repo `.cursor/agents/` (e.g., `mobile-ui-change.md`)
+**Orchestrator Agents**: Located in automation repo `.cursor/agents/` (e.g., `mobile-ui.md`)
+**Agent-Specific Skills**: Located in automation repo `.cursor/skills/` (e.g., `mobile-ui-prepare-xif-from-local.md`)
 **Repository-Specific Agents/Skills**: Located in their respective repos (e.g., `runtime-mobile-widgets-js/.cursor/agents/`, `OutSystems.WidgetLibrary/.cursor/skills/`)
 
 ## Key Rules
@@ -90,7 +93,7 @@ This framework uses the following MCP servers (configured in `~/.cursor/mcp.json
 - **Never commit credentials** - All credentials are in `.env` files (gitignored)
 - **Always validate** - Check that PR titles, branch names, etc. follow conventions
 - **Use natural language** - Infer which skill/agent to use from the user's request (no need for explicit prefixes)
-- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/shared/skills/` (shared skills) or `.cursor/agents/` (orchestrator agents) or repo-specific `.cursor/agents/` (repo agents) and follow its rules
+- **Read skill/agent files** - When a task matches a skill or agent, read the corresponding file from `.cursor/shared/skills/` (shared skills), `.cursor/skills/` (agent-specific skills, automation repo), `.cursor/agents/` (orchestrator agents), or repo-specific `.cursor/agents/` or `.cursor/skills/` (repo agents/skills) and follow its rules
 - **Use project configs** - Check `projects/{project}/config.json` in the automation repo for project-specific settings (Figma file keys, Jira projects, etc.)
 
 ## Examples

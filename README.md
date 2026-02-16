@@ -11,6 +11,7 @@ This repository contains a comprehensive framework for standardizing AI-assisted
 **Shared Framework (symlinked to individual repos):**
 - **`.cursor/shared/skills/`** - Reusable task rules and guidelines (PR creation, Jira updates, etc.)
 - **`.cursor/agents/`** - Orchestrator agents (automation repo only)
+- **`.cursor/skills/`** - Agent-specific skills (automation repo only), e.g. prepare XIF from local
 - **`.cursor/teams/`** - Team-specific overrides (automation repo only)
 
 **Automation Repo Only:**
@@ -177,6 +178,7 @@ Use natural language - the AI will automatically identify which skills/agents to
 - "Update the Jira story" → Uses Jira update rules
 - "Create a branch" → Uses branch naming rules
 - "Check if this matches Figma" → Uses design verification rules
+- "Prepare XIF from local" or "Bundle and prepare XIF" → Uses prepare-xif-from-local skill (bundle widgets-js, update WidgetLibrary from local, run prepare-xif)
 - "Complete story ROU-12345" → Uses story completion workflow
 
 **Prefixes are optional** - You can use `skill:` or `agent:` prefixes if you want to be explicit, but natural language works just as well.
