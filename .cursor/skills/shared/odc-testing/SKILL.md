@@ -1,6 +1,6 @@
 ---
 name: odc-testing
-description: Guides ODC Studio test app workflow after XIF publishing (create app, verify version, test widget, document in Jira). Use when the user says test in ODC, create test app, ODC testing, or wants to test after publishing XIF.
+description: Guides ODC Studio test app workflow after XIF publishing (create app, verify version, test widget, document in Jira). Use when the user says test in ODC, create test app, ODC testing, or wants to test after publishing XIF. When the user asks for the app URL given an app name, reply with the short-form URL.
 ---
 
 # Skill: ODC Testing
@@ -157,17 +157,27 @@ For native Android build: use ODC app page → Mobile Distribution → Android.
 ❌ **Technical Release Notes** - Must be user-focused, not implementation details  
 ❌ **Browser testing for device-specific changes** - Use native build when needed
 
+## App name → short-form URL
+
+When the user says **"given app name X give me the app URL"** (or similar), reply with the **short-form URL** only:
+
+- **Format:** `https://eng-starter-apps-dev.outsystems.app/{appSlug}`
+- **appSlug:** App name with **all hyphens removed** (e.g. `ROU-12461-android-cls-btn` → `ROU12461androidclsbtn`).
+
+Example: app name `ROU-12461-android-cls-btn` → `https://eng-starter-apps-dev.outsystems.app/ROU12461androidclsbtn`
+
 ## AI Instructions
 
 When the user requests ODC testing or mentions testing after XIF publishing:
 
-1. **Guide through the workflow** step by step
-2. **Verify each step** is completed before moving to next
-3. **Check MobileUI version** - This is critical for verification
-4. **Remind about Home screen configuration** - Often forgotten
-5. **Determine testing method** - Native build vs browser based on story requirements
-6. **Document in Jira** - Move to Review, add app link, update Release Notes
-7. **Use skill:jira-updates** - For updating Jira story fields and comments
+1. **App URL from app name:** If the user asks for the app URL given an app name (e.g. "given app name X give me the app url"), reply with only the short-form URL: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` where appSlug is the app name with hyphens removed.
+2. **Guide through the workflow** step by step
+3. **Verify each step** is completed before moving to next
+4. **Check MobileUI version** - This is critical for verification
+5. **Remind about Home screen configuration** - Often forgotten
+6. **Determine testing method** - Native build vs browser based on story requirements
+7. **Document in Jira** - Move to Review, add app link, update Release Notes
+8. **Use skill:jira-updates** - For updating Jira story fields and comments
 
 ## Integration with Other Skills
 
