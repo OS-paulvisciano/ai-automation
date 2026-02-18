@@ -21,7 +21,7 @@ When the user requests automation tasks, use natural language and automatically 
 - "Create a branch" → Use `.cursor/skills/shared/branch-naming/SKILL.md` rules
 - "Check if this matches Figma" → Use `.cursor/skills/shared/design-verification/SKILL.md` rules
 - "Test in ODC" or "Create test app" → Use `.cursor/skills/shared/odc-testing/SKILL.md` rules
-- "Prepare XIF from local", "XIF prepare", "prepare xif", or "Bundle and prepare XIF" → Use `.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md` (then delegate to repo agents)
+- "Prepare XIF from local", "XIF prepare", "prepare xif", or "Bundle and prepare XIF" → Use `.cursor/skills/mobile-ui-prepare-xif-from-local/SKILL.md` (then delegate to repo agents). For WidgetLibrary-only iteration use same skill and skip bundle/copy steps per skill rules.
 - "Complete this story" or "End-to-end Mobile UI change" or "Publish XIF" → Use `.cursor/agents/mobile-ui.md` workflow
 
 **Prefixes are optional** - The user may use `skill:` or `agent:` prefixes, but natural language is preferred and works just as well. The AI should infer which skill/agent to use from the request context.
@@ -61,7 +61,7 @@ When resolving which rules to use, follow this priority order:
 
 ### XIF Prepare (from local)
 - **Always** use `skill:mobile-ui-prepare-xif-from-local` when preparing XIF from local (xif prepare, bundle and prepare XIF)
-- **Must** delegate to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF); do not run npm commands directly
+- **Must** delegate to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF); do not run npm commands directly. When user asks to skip building widgets-js or "WidgetLibrary only", skip bundle (and copy if WidgetLibrary-only) per skill rules.
 
 ## Workflow Agents
 

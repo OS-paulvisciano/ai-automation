@@ -19,13 +19,10 @@ XIF preparation and publishing workflows for the WidgetLibrary repository. Handl
 ### Prepare XIF File
 
 **Required Steps**:
-1. Navigate to ServiceStudio directory:
+1. From WidgetLibrary root, run the prepare script (symlink it to `scripts/prepare_xif.js` if needed; see skill `mobile-ui-prepare-xif-from-local`):
    ```bash
-   cd ~/repos/OutSystems.WidgetLibrary/ServiceStudio
-   ```
-2. Run XIF preparation script:
-   ```bash
-   npm run prepare-xif
+   cd ~/repos/OutSystems.WidgetLibrary
+   node scripts/prepare_xif.js
    ```
 
 **What The Script Does**:
