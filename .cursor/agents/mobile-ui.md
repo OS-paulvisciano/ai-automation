@@ -26,6 +26,26 @@ Complete end-to-end workflow orchestrator for making Mobile UI widget changes, f
 
 **Agent Role**: This is an orchestrator agent that coordinates multiple skills and delegates to repo-specific agents to complete complex workflows. It serves as the high-level workflow coordinator for the entire Mobile UI change process, delegating repository-specific work to appropriate agents while handling cross-repo coordination and ODC testing.
 
+## Recommended story flow
+
+Follow this order so the user can verify the plan and the implementation before anything is committed or reported to Jira.
+
+1. **Information gathering** (no code changes)
+   - Use **Jira MCP** to fetch the story: summary, description, acceptance criteria, DoD, labels, any linked Figma or docs.
+   - Use **Figma MCP** when the story references a Figma file (e.g. node URL): fetch design specs, tokens, and component properties so the plan and implementation match design.
+2. **Create a plan**
+   - Write a plan (e.g. in `.cursor/plans/`) that covers branches, implementation outline (widgets-js and WidgetLibrary), XIF version, and execution order. Base it on the gathered Jira and Figma information.
+3. **Manual verification of the plan**
+   - User reviews the plan. Do not run implementation until the user has confirmed or adjusted the plan.
+4. **Run the plan**
+   - Execute the plan (create branches, implement, build, update WidgetLibrary, prepare XIF, test in Storybook / ODC as needed). **Do not commit, push, or update the Jira story yet.**
+5. **Manual verification of the implementation**
+   - User manually verifies the implementation (e.g. Storybook, ODC test app). Only after the user confirms that everything looks correct:
+6. **Commit, Jira, and PR**
+   - Commit and push; use `skill:jira-updates` to update "What I Did" and verification steps; use `skill:release-notes` if needed; use `skill:pr-creation` when ready.
+
+**Summary**: Gather (Jira + Figma) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, update Jira, create PR.
+
 ## Technology Stack
 
 OutSystems owns the entire stack, with each layer built on top of the previous:
@@ -128,8 +148,7 @@ This orchestrator delegates repository-specific work to repo-specific agents and
 - Implements widget changes
 - Tests in Storybook
 - Builds and bundles
-- Updates Jira "What I Did" section
-- Commits and pushes changes
+- When following the [Recommended story flow](#recommended-story-flow): do **not** commit, push, or update Jira until after the user has manually verified the implementation. Then commit, push, and update Jira "What I Did" (and release notes/PR as needed).
 
 **Delegation**:
 - Pass to `agent:widgets-js`: Jira issue ID, Figma file (if available)
@@ -138,7 +157,7 @@ This orchestrator delegates repository-specific work to repo-specific agents and
 **Validation**:
 - `agent:widgets-js` completes successfully
 - Branch exists in `runtime-mobile-widgets-js`
-- Changes are committed and pushed
+- After manual verification: changes are committed and pushed
 
 ---
 
@@ -247,6 +266,8 @@ This orchestrator delegates repository-specific work to repo-specific agents and
 #### 4.4 Document in Jira
 
 **Skills**: `skill:jira-updates`, `skill:release-notes`
+
+**When**: Only after the user has **manually verified** the implementation (Storybook and/or ODC). See [Recommended story flow](#recommended-story-flow): no Jira updates or commits until verification is done.
 
 **Steps**:
 1. Use `skill:jira-updates` to update Jira story

@@ -63,10 +63,14 @@ When resolving which rules to use, follow this priority order:
 - **Always** use `skill:mobile-ui-prepare-xif-from-local` when preparing XIF from local (xif prepare, bundle and prepare XIF)
 - **Must** delegate to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF); do not run npm commands directly. When user asks to skip building widgets-js or "WidgetLibrary only", skip bundle (and copy if WidgetLibrary-only) per skill rules.
 
+### Mobile UI story flow
+- **Preferred order** for Mobile UI stories: (1) **Information gathering** via Jira MCP and Figma MCP (story details, design specs). (2) **Create a plan** (e.g. in `.cursor/plans/`). (3) **User manually verifies the plan** before any implementation. (4) **Run the plan** (implement, build, XIF, test) — **do not commit or update Jira yet**. (5) **User manually verifies the implementation**. (6) **Then** commit, push, update Jira ("What I Did"), release notes, and create PR. See `.cursor/agents/mobile-ui.md` (Recommended story flow).
+
 ## Workflow Agents
 
 ### Mobile UI (Orchestrator)
 - Use `agent:mobile-ui` for complete Mobile UI story workflows
+- **Recommended story flow**: Information gathering (Jira + Figma MCP) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, Jira update, PR. Do not commit or update the story until manual verification is done.
 - Orchestrates: delegates to `agent:widgets-js` → `agent:widget-library` → ODC testing → PR creation
 - Handles cross-repo coordination and ODC testing
 - Most comprehensive agent for Mobile UI work

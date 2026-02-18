@@ -20,6 +20,7 @@ All agents are in the automation repo at `.cursor/agents/`:
 - **`mobile-ui`** - `.cursor/agents/mobile-ui.md`
   - End-to-end Mobile UI workflow orchestrator (delegates to widgets-js and widget-library agents)
   - **Primary agent for Mobile UI work**
+  - **Recommended story flow**: Information gathering (Jira + Figma MCP) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, Jira update, PR. See agent doc "Recommended story flow".
   - **Prepare XIF from local**: Use `skill:mobile-ui-prepare-xif-from-local`; delegates to agent:widgets-js (build) then agent:widget-library (update from local + prepare XIF). ODC publishing is manual.
 
 - **`agent:widgets-js`** - `.cursor/agents/widgets-js.md`

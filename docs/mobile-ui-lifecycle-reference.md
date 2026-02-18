@@ -19,6 +19,23 @@ This document provides a complete reference of the Mobile UI change workflow fro
 
 ---
 
+## Recommended story flow (information → plan → verify → run → verify → commit)
+
+Use this order so the plan and implementation can be verified before anything is committed or reported to Jira.
+
+| Step | What | Tools / actions |
+|------|------|------------------|
+| 1. **Information gathering** | Get story and design context; no code changes | **Jira MCP**: fetch story (summary, description, acceptance criteria, DoD, Figma links). **Figma MCP**: when story has Figma, fetch specs, tokens, component properties. |
+| 2. **Create a plan** | Write an implementation plan from gathered info | Plan in `.cursor/plans/`: branches, widgets-js outline, WidgetLibrary outline, XIF version, execution order. |
+| 3. **Manual verification of plan** | User approves or adjusts the plan | User reviews plan; do not run implementation until user confirms. |
+| 4. **Run the plan** | Execute implementation | Branches, code, build, WidgetLibrary update, prepare XIF, Storybook/ODC testing as needed. **Do not commit, push, or update Jira yet.** |
+| 5. **Manual verification of implementation** | User checks that the result is correct | User verifies in Storybook and/or ODC. |
+| 6. **Commit, Jira, PR** | Persist and report only after verification | Commit & push; `skill:jira-updates` ("What I Did", verification steps); `skill:release-notes`; `skill:pr-creation` when ready. |
+
+**Summary**: Gather (Jira + Figma) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, update Jira, create PR.
+
+---
+
 ## Phase 1: TO DO → IN PROGRESS
 
 ### 1.1 Pick Up Story
@@ -85,6 +102,8 @@ This document provides a complete reference of the Mobile UI change workflow fro
 
 **Status**: ✅ **Automated** (via `skill:jira-updates`)
 
+**When**: Only **after** manual verification of the implementation when following the [Recommended story flow](#recommended-story-flow-information--plan--verify--run--verify--commit). Do not update Jira until the user has verified the changes.
+
 **Steps**:
 1. Use `skill:jira-updates` to update Jira story
 2. Update "What I Did" section with:
@@ -105,6 +124,8 @@ This document provides a complete reference of the Mobile UI change workflow fro
 ### 2.3 Commit and Push Changes
 
 **Status**: ✅ **Automated** (via git commands)
+
+**When**: Only **after** manual verification of the implementation when following the [Recommended story flow](#recommended-story-flow-information--plan--verify--run--verify--commit). Do not commit or push until the user has verified the changes.
 
 **Steps**:
 1. Commit changes to feature branch
