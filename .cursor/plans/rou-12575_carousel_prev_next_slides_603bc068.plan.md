@@ -170,11 +170,12 @@ sequenceDiagram
 Links that were relevant for implementing this story (information gathering, design alignment, and API usage).
 
 
-| Reference              | Link                                                                                                                                                                                                                                            |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Jira story**         | [ROU-12575](https://outsystemsrd.atlassian.net/browse/ROU-12575) (cloudId: 3755dbe1-fa22-4c37-956e-59bea84af9cf)                                                                                                                                |
-| **Figma**              | [GA Mobile UI / Dev Experience – Improvements](https://www.figma.com/design/xSk9vrYWTlLO1uLn12Wf4Q/-GA--Mobile-UI---Dev-Experience?node-id=12557-5753) (node 12557-5753 – Carousel specs, Show Prev/Next Slides, Slide Gap tokens, Prev/Next %) |
-| **Embla Carousel API** | [API docs](https://www.embla-carousel.com/api/) – options, methods, events; used for alignment, containScroll, and inViewMargin for prev/next peek                                                                                              |
+| Reference              | Link                                                                                                                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Jira story**         | [ROU-12575](https://outsystemsrd.atlassian.net/browse/ROU-12575) (cloudId: 3755dbe1-fa22-4c37-956e-59bea84af9cf)                                                                                                                                 |
+| **Figma**              | [GA Mobile UI / Dev Experience – Improvements](https://www.figma.com/design/xSk9vrYWTlLO1uLn12Wf4Q/-GA--Mobile-UI---Dev-Experience?node-id=12557-5753) (node 12557-5753 – Carousel specs, Show Prev/Next Slides, Slide Gap tokens, Prev/Next %)  |
+| **Embla Carousel API** | [API docs](https://www.embla-carousel.com/api/) – options, methods, events; used for alignment, containScroll, and inViewMargin for prev/next peek                                                                                               |
+| **Embla Slide Gaps**   | [Slide Gaps guide](https://www.embla-carousel.com/guides/slide-gaps/#gap-or-margin) – padding approach (padding on slides + negative margin on container); inViewMargin to match horizontal padding. Implementation follows this (no CSS `gap`). |
 
 
 **Framework / agents** (automation repo):
@@ -200,3 +201,71 @@ Summary of what was done differently during implementation, for future reference
 | **Skill: skip build**        | Not in plan                                                   | Skill supports **skipping widgets-js build** (WidgetLibrary-only iteration) or skip bundle only; see skill doc.                                                                                                                                                                                                                        |
 
 
+---
+
+## 9. Testing notes
+
+Manual/Storybook checks to run before release; these can be added as Storybook story variants or test cases later.
+
+**Visual / no cut-off**
+
+- **Slides must not appear cut off** – first and subsequent slides should show **full rounded corners** (no clipping on left or right). Gap is implemented with **margin-inline: calc(var(--gap) / 2)** on every slide so corners are not clipped and, when **Loop** is on, space is even on both sides. **Align**: when Show Prev/Next Slides is on, **Loop off** → align start (current slide full, next peeks right); **Loop on** → align center (current centered, gap split both sides).
+
+**Combinations to cover**
+
+
+| Dimension                 | Values to test                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| **Show Prev/Next Slides** | On, Off                                                                                       |
+| **Prev/Next Slides %**    | **Min 10**, **Max 25**, and e.g. 15 (default)                                                 |
+| **Slide Gap**             | All gap values: **0, 4, 8, 16 px** (token-gap-0, token-gap-100, token-gap-200, token-gap-400) |
+| **Loop**                  | On, Off                                                                                       |
+
+
+**Suggested flow**
+
+- With **Show Prev/Next Slides = Off**: confirm full-width slide, no gap applied, no cut-off.
+- With **Show Prev/Next Slides = On**: for each **Slide Gap** and for **Prev/Next %** at 10, 15, 25, confirm no cut-off (rounded corners visible), correct peek and spacing; repeat with **Loop** on and off.
+
+---
+
+## 10. Design verification (Story + Figma)
+
+Double-check against the Storybook story and Figma. Verified as of implementation.
+
+### Storybook (Carousel.stories.tsx)
+
+
+| Item                      | Story                                                                                     | Implementation                                                            | Match |
+| ------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----- |
+| **Show Prev/Next Slides** | Boolean; default false; story "Show Prev/Next Slides" and "Show Prev/Next Slides (Cards)" | `showPrevNextSlides` prop, default false                                  | Yes   |
+| **Slide Gap**             | Select: 0px, 4px, 8px, 16px (TokenGap0/100/200/400)                                       | `_slideGapToPx`: 0, 4, 8, 16 px                                           | Yes   |
+| **Prev/Next Slides %**    | Number min 10, max 25; default 15                                                         | Clamped 10–25 in AbstractCarousel; default 15                             | Yes   |
+| **Loop**                  | Boolean; stories "Loop", "Show Prev/Next Slides"                                          | `loop` prop; align center when loop+showPrevNext, else start              | Yes   |
+| **Shape**                 | Round, Rectangular, Soft                                                                  | `tokens.$token-round-xl`, `token-soft-xl`, `token-rectangular-xl` in SCSS | Yes   |
+| **Stories**               | BasicUsage, ShowPrevNextSlides, ShowPrevNextSlidesWithCards, CarouselWithLoop, etc.       | All use same Carousel component and args                                  | Yes   |
+
+
+### Figma (GA Mobile UI / Dev Experience – node 12557:5753)
+
+
+| Item                   | Figma                                                                                                         | Implementation                                                | Match |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----- |
+| **Property name**      | "Show Prev/Next Slides" (also "Show Adjacent Slide" in description)                                           | ShowPrevNextSlides                                            | Yes   |
+| **Slide Gap**          | Dropdown with token labels: token-gap-0, token-gap-100, token-gap-200, token-gap-400; default "token-gap-400" | Enum TokenGap0/100/200/400 → 0/4/8/16 px; default TokenGap400 | Yes   |
+| **Prev/Next Slides %** | Label "Prev/Next Slides %"; example value 15; description "10–25% recommended"                                | prevNextSlidesPercent, default 15, clamped 10–25              | Yes   |
+| **Gap tokens**         | token-gap-0 … token-gap-400                                                                                   | 0, 4, 8, 16 px (standard scale)                               | Yes   |
+
+
+### Codebase tokens (widgets-js)
+
+
+| Token                           | Codebase value                                    | Usage in Carousel                                                                |
+| ------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **Default gap (SCSS fallback)** | `$token-space-400` → 16px (scale-400)             | `--gap` in _emblaCarousel.scss; overridden by inline style from AbstractCarousel |
+| **Slide gap (runtime)**         | 0, 4, 8, 16 px from _slideGapToPx                 | Set via style `--gap`; only when showPrevNextSlides                              |
+| **Round shape**                 | `$token-round-xl` → border-radius-400 (e.g. 16px) | .embla__shape--round                                                             |
+| **Soft shape**                  | `$token-soft-xl` → border-radius-200              | .embla__shape--soft                                                              |
+
+
+**Conclusion:** Story and Figma align with the implementation. Property names, token labels (token-gap-0/100/200/400), default (token-gap-400, 15%), and 10–25% range match. Visually confirm in Storybook with the testing matrix in §9.
