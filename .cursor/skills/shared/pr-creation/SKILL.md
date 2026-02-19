@@ -75,7 +75,8 @@ description: Creates pull requests with required PR title format, labels, and te
 ### PR Requirements Checklist
 
 Before creating PR, verify:
-- [ ] Branch created from `main`
+- [ ] **Pull latest**: Base branch merged into feature branch and conflicts resolved (e.g. `git fetch origin main && git merge origin/main` in widgets-js; `origin/dev` in WidgetLibrary). Pushing and opening the PR only after this avoids CI running twice due to merge conflicts.
+- [ ] Branch created from `main` (widgets-js) or `dev` (WidgetLibrary)
 - [ ] Code has been tested
 - [ ] Test suite passes
 - [ ] Code lints without errors
@@ -103,19 +104,23 @@ Before creating PR, verify:
    - Always create from `main`
    - Never from feature branches
 
+5. **Creating PR Without Pulling Latest**
+   - Merge the base branch into the feature branch before pushing and creating the PR (widgets-js: merge `main`; WidgetLibrary: merge `dev`). Resolve conflicts, then push and create PR. Otherwise CI may run, then conflicts appear, and a second CI run is needed after resolution.
+
 ### AI Instructions
 
 When creating a PR, the AI MUST:
-1. Extract Jira issue ID from branch name or context
-2. Get Jira issue summary for PR title subject
-3. Remove component prefixes like `[MobileUI]`, `[ComponentName]`, etc. from Jira summary
-4. Format title as: `<jira-issue>: <subject>`
-5. Include colon after Jira issue
-6. Fill Context section with why change is needed
-7. Fill Impacts section, checking applicable boxes
-8. Determine label from Jira issue type (Story/Feature → `feature`, Bug → `bugfix`, etc.)
-9. Set at least one label
-10. Verify all requirements are met before creating
+1. **Pull latest first** (when publishing branches and creating PRs): In each repo, fetch and merge the base branch into the feature branch, resolve any conflicts, then push. Only then create the PR. This avoids wasting CI runs on a branch that will immediately need conflict resolution.
+2. Extract Jira issue ID from branch name or context
+3. Get Jira issue summary for PR title subject
+4. Remove component prefixes like `[MobileUI]`, `[ComponentName]`, etc. from Jira summary
+5. Format title as: `<jira-issue>: <subject>`
+6. Include colon after Jira issue
+7. Fill Context section with why change is needed
+8. Fill Impacts section, checking applicable boxes
+9. Determine label from Jira issue type (Story/Feature → `feature`, Bug → `bugfix`, etc.)
+10. Set at least one label
+11. Verify all requirements are met before creating
 
 ### Reference Links
 - PR Conventions: https://outsystemsrd.atlassian.net/wiki/spaces/RCP/pages/1544487638/Pull+Requests

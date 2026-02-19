@@ -284,16 +284,17 @@ Use this order so the plan and implementation can be verified before anything is
 **Status**: ✅ **Automated** (via `skill:pr-creation`)
 
 **Steps**:
-1. Use `skill:pr-creation` to create PR
-2. Format title: `ROU-12461: Card - Implement Android close button pressed state`
-3. Fill Context section
-4. Fill Impacts section
-5. Set appropriate label (determined from Jira issue type)
-6. Link PR to Jira issue
+1. **Pull latest before creating PRs** (avoids wasting CI): In each repo, merge the base branch into the feature branch (`git fetch origin main` / `origin/dev`, then `git merge origin/main` or `origin/dev`), resolve any conflicts, then push. This way the first CI run is on a branch that is already up to date with the base, avoiding merge conflicts and a second CI run after resolution.
+2. Use `skill:pr-creation` to create PR
+3. Format title: `ROU-12461: Card - Implement Android close button pressed state`
+4. Fill Context section
+5. Fill Impacts section
+6. Set appropriate label (determined from Jira issue type)
+7. Link PR to Jira issue
 
 **Repositories**:
-- `runtime-mobile-widgets-js`: PR from `ROU-12461` to `main`
-- `OutSystems.WidgetLibrary`: PR from `ROU-12461` to `dev`
+- `runtime-mobile-widgets-js`: PR from `ROU-12461` to `main` (merge `main` into branch before push)
+- `OutSystems.WidgetLibrary`: PR from `ROU-12461` to `dev` (merge `dev` into branch before push)
 
 **Automation**: GitHub CLI/MCP can create PRs with proper format
 

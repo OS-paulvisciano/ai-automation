@@ -42,9 +42,10 @@ Follow this order so the user can verify the plan and the implementation before 
 5. **Manual verification of the implementation**
    - User manually verifies the implementation (e.g. Storybook, ODC test app). Only after the user confirms that everything looks correct:
 6. **Commit, Jira, and PR**
-   - Commit and push; use `skill:jira-updates` to update "What I Did" and verification steps; use `skill:release-notes` if needed; use `skill:pr-creation` when ready.
+   - Commit; **pull latest** (merge base branch into feature branch in each repo: `main` in runtime-mobile-widgets-js, `dev` in OutSystems.WidgetLibrary), resolve any conflicts, then push; use `skill:jira-updates` to update "What I Did" and verification steps; use `skill:release-notes` if needed; use `skill:pr-creation` when ready.
+   - **Why pull before push/PR**: Merging the base branch into the feature branch before pushing and creating PRs avoids merge conflicts that would otherwise trigger CI, then require conflict resolution and a second CI run.
 
-**Summary**: Gather (Jira + Figma) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, update Jira, create PR.
+**Summary**: Gather (Jira + Figma) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, **pull latest and resolve conflicts**, push, update Jira, create PR.
 
 ## Technology Stack
 
