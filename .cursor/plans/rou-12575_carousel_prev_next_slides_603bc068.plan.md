@@ -172,7 +172,7 @@ Links that were relevant for implementing this story (information gathering, des
 
 | Reference              | Link                                                                                                                                                                                                                                            |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Jira story**         | [ROU-12575](https://outsystemsrd.atlassian.net/browse/ROU-12575) (cloudId: 3755dbe1-fa22-4c37-956e-59bea84af9cf)                                                                                                                                  |
+| **Jira story**         | [ROU-12575](https://outsystemsrd.atlassian.net/browse/ROU-12575) (cloudId: 3755dbe1-fa22-4c37-956e-59bea84af9cf)                                                                                                                                |
 | **Figma**              | [GA Mobile UI / Dev Experience – Improvements](https://www.figma.com/design/xSk9vrYWTlLO1uLn12Wf4Q/-GA--Mobile-UI---Dev-Experience?node-id=12557-5753) (node 12557-5753 – Carousel specs, Show Prev/Next Slides, Slide Gap tokens, Prev/Next %) |
 | **Embla Carousel API** | [API docs](https://www.embla-carousel.com/api/) – options, methods, events; used for alignment, containScroll, and inViewMargin for prev/next peek                                                                                              |
 
