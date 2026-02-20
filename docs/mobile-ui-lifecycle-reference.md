@@ -114,10 +114,11 @@ Use this order so the plan and implementation can be verified before anything is
 
 **Automation**: Jira MCP updates custom fields and comments
 
-**Current Limitation**: ⚠️ Formatting is lost when MCP updates "What I Did" section
-- **Issue**: Markdown formatting (headers, lists, code blocks) may not be preserved
-- **Workaround**: Manual formatting may be needed after automated update
-- **Future Enhancement**: Improve ADF formatting to preserve markdown structure
+**Current Limitation**: ⚠️ Do not auto-update "What I Did" in Jira (formatting breaks)
+- **Issue**: Automatic updates to the description field cause formatting issues in Jira
+- **Workaround**: Generate the full "What I Did" content (with PR links and ODC URL) in chat for the user to copy/paste manually into the story
+- **PR links**: Run `gh pr list --head ROU-XXXX --state open --json url --jq '.[0].url'` in each repo to get PR URLs for the Code and Automated Tests sections
+- **ODC Samples URL**: Use `https://eng-starter-apps-dev.outsystems.app/{appSlug}` with **no** `/Home`; if app name is the branch (e.g. ROU-12575), appSlug = ROU12575
 
 ---
 
@@ -616,6 +617,29 @@ Use this order so the plan and implementation can be verified before anything is
 **TESTING** → **PO ACCEPTANCE** → **DONE**
 - ⚠️ Manual: Testing and PO acceptance
 - ✅ Automated: Status transitions
+
+---
+
+## Learnings from recent stories (e.g. ROU-12575)
+
+Use these to make the next story easier:
+
+**Merge conflicts (before PR / when pulling base)**
+- **runtime-mobile-widgets-js**: Merge `origin/main` into the feature branch before pushing. If conflicts appear (e.g. Carousel), resolve by keeping the feature’s behavior (e.g. align/inViewMargin for showPrevNextSlides; margin-based gaps, not container gap).
+- **OutSystems.WidgetLibrary**: Merge `origin/dev` into the feature branch. Conflicts often affect: `Common/Widgets.xml`, `AssemblyInfo.cs`, and the three runtime/designtime files. Two approaches:
+  1. **Resolve manually**: Keep dev’s version numbers (e.g. 1.0.405); keep your branch’s runtime assets if they contain the feature.
+  2. **Use “theirs” then reapply**: `git merge origin/dev -X theirs` to take dev’s versions everywhere, then run **copy-from-local** from widgets-js again so the three runtime/designtime files reflect your build. Meaningful WidgetLibrary-only changes (e.g. `Widgets.xml` Carousel props, `Carousel.cs` validation) are usually already on dev or preserved; the dist files are just copied from widgets-js.
+
+**What I Did and Release notes**
+- Generate “What I Did” and Release Note text in chat for the user to copy/paste. Do **not** update the Jira description via API (formatting is lost).
+- Fill PR links by running `gh pr list --head ROU-XXXX` in each repo and paste the URLs into the generated “What I Did”.
+
+**ODC test app URL**
+- Shareable URL format: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` — **do not** append `/Home`.
+- appSlug = app name with all hyphens removed. Common convention: app name = branch name (e.g. ROU-12575), so URL = `https://eng-starter-apps-dev.outsystems.app/ROU12575`.
+
+**Prepare XIF from local**
+- If WidgetLibrary has no `copy-from-local` npm script, run the equivalent copies (e.g. `npx ncp` from `../../runtime-mobile-widgets-js/dist/` to RuntimeResources and DesignTime) as in `skill:widget-library-update-widgets-js` local mode.
 
 ---
 

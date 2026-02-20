@@ -47,6 +47,25 @@ Follow this order so the user can verify the plan and the implementation before 
 
 **Summary**: Gather (Jira + Figma) → Plan → User verifies plan → Run (no commit/Jira) → User verifies implementation → Then commit, **pull latest and resolve conflicts**, push, update Jira, create PR.
 
+## Learnings / workflow tips (from recent stories, e.g. ROU-12575)
+
+Use these to avoid common mistakes on the next story:
+
+**Merge conflicts (before PR / when pulling base)**
+- **runtime-mobile-widgets-js**: Merge `origin/main` into the feature branch before pushing. Resolve conflicts by keeping the feature’s behavior (e.g. align/inViewMargin, margin-based gaps for Carousel).
+- **OutSystems.WidgetLibrary**: Merge `origin/dev` into the feature branch. Option: use `git merge origin/dev -X theirs` to take dev’s versions, then run **copy-from-local** from widgets-js so runtime/designtime files reflect your build. Meaningful WidgetLibrary-only changes (e.g. Widgets.xml, *.cs) are usually on dev or preserved; dist files are copied from widgets-js.
+
+**What I Did and Release notes**
+- Generate “What I Did” and Release Note text in chat for the user to **copy/paste**. Do **not** update the Jira description via API (formatting breaks).
+- Fill PR links by running `gh pr list --head ROU-XXXX --state open --json url --jq '.[0].url'` in each repo and paste into the generated “What I Did”.
+
+**ODC test app URL**
+- Shareable URL: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` — **do not** append `/Home`.
+- appSlug = app name with all hyphens removed. Common convention: app name = branch (e.g. ROU-12575) → URL = `https://eng-starter-apps-dev.outsystems.app/ROU12575`.
+
+**Prepare XIF from local**
+- If WidgetLibrary has no `copy-from-local` npm script, run the equivalent copies (e.g. `npx ncp` from `../../runtime-mobile-widgets-js/dist/`) as in `skill:widget-library-update-widgets-js` local mode.
+
 ## Technology Stack
 
 OutSystems owns the entire stack, with each layer built on top of the previous:

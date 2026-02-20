@@ -60,6 +60,8 @@ Updating widgets-js in WidgetLibrary — pulling widgets-js artifacts from eithe
 
 **Note**: If repos are not siblings, run equivalent copy commands with your source path, or set up a script that uses `WIDGETS_JS_DIST` for the source directory.
 
+**No `copy-from-local` script**: If ServiceStudio has no `copy-from-local` npm script, run the equivalent copies manually (e.g. `npx ncp` or `cp`) from `../../runtime-mobile-widgets-js/dist/` to the four destinations listed above (RuntimeResources and DesignTime paths).
+
 ### Validation
 
 - Script completes without errors

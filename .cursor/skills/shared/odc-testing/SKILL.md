@@ -29,7 +29,8 @@ Use this skill after:
 7. **After publish**, the button becomes **Open in browser**. That opens the preview URL:
    - `https://eng-starter-apps.outsystems.dev/preview/application?id={appId}&stageid={stageId}&screen=Home`
 8. **Shareable shorter link** for the same app in the browser:
-   - `https://eng-starter-apps-dev.outsystems.app/{appSlug}` (app slug has no hyphens, e.g. `ROU12461androidclsbtn`).
+   - `https://eng-starter-apps-dev.outsystems.app/{appSlug}` — **do not** append `/Home`. appSlug has no hyphens (e.g. `ROU12461androidclsbtn`).
+   - **Common convention**: App name = branch name (e.g. ROU-12575) → appSlug = `ROU12575` → URL = `https://eng-starter-apps-dev.outsystems.app/ROU12575`.
 9. **Native binary (when needed):** Create it from the app’s mobile distribution page:
    - `https://eng-starter-apps.outsystems.dev/apps/application?id={appId}&stageid={stageId}&tab=mobiledistribution&mobileoption=android` (use `mobileoption=ios` for iOS).
 
@@ -85,7 +86,7 @@ Use this skill after:
 **Steps:**
 - Click **"Publish"** in ODC Studio. After publishing, the button changes to **"Open in browser"**.
 - **Open in browser** opens: `https://eng-starter-apps.outsystems.dev/preview/application?id={appId}&stageid={stageId}&screen=Home`
-- The app is also viewable via the shorter shareable link: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` (slug has no hyphens).
+- The app is also viewable via the shorter shareable link: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` (slug has no hyphens; **no** `/Home`).
 
 **Native binary (final step when required):**
 - Create the native binary from: `https://eng-starter-apps.outsystems.dev/apps/application?id={appId}&stageid={stageId}&tab=mobiledistribution&mobileoption=android` (or `mobileoption=ios`).
@@ -128,7 +129,7 @@ Use this skill after:
 ```
 Test app created and published:
 - App Name: ROU-12461-android-cls-btn
-- Shareable URL: https://eng-starter-apps-dev.outsystems.app/ROU12461androidclsbtn
+- Shareable URL: https://eng-starter-apps-dev.outsystems.app/ROU12461androidclsbtn (no /Home)
 - Version: 1.0.380
 
 Ready for verification. The app includes a Card component with the new Android close button styling. 
@@ -161,8 +162,9 @@ For native Android build: use ODC app page → Mobile Distribution → Android.
 
 When the user says **"given app name X give me the app URL"** (or similar), reply with the **short-form URL** only:
 
-- **Format:** `https://eng-starter-apps-dev.outsystems.app/{appSlug}`
+- **Format:** `https://eng-starter-apps-dev.outsystems.app/{appSlug}` — **do not** add `/Home`.
 - **appSlug:** App name with **all hyphens removed** (e.g. `ROU-12461-android-cls-btn` → `ROU12461androidclsbtn`).
+- **Convention:** If app name is the branch (e.g. `ROU-12575`), slug = `ROU12575` → `https://eng-starter-apps-dev.outsystems.app/ROU12575`.
 
 Example: app name `ROU-12461-android-cls-btn` → `https://eng-starter-apps-dev.outsystems.app/ROU12461androidclsbtn`
 

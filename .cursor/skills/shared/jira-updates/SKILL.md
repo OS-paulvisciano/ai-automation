@@ -68,11 +68,16 @@ PR →
 **Format Rules**:
 - Use bullet points with letters (a, b, c, etc.) for test case steps
 - Use **Expected:** (bolded) for expected results
-- Include ODC App URL in Samples section if available
-- Leave PR links empty (→) to be filled by user
+- Include ODC App URL in Samples section if available (see **ODC URL format** below)
+- **PR links**: Fill by running in each repo: `gh pr list --head ROU-XXXX --state open --json url --jq '.[0].url'` (runtime-mobile-widgets-js for Code PR, OutSystems.WidgetLibrary for Automated Tests PR if applicable)
 - Use "N/A" for OutSystems if not applicable
 - Do NOT include "Technical Details" section
 - Keep test cases focused on how to manually test the feature
+
+**ODC URL format (Samples section)**:
+- Use the **shareable** URL only: `https://eng-starter-apps-dev.outsystems.app/{appSlug}`
+- **Do not** append `/Home` to the URL
+- appSlug = app name with **all hyphens removed**. Common convention: app name = branch name (e.g. ROU-12575) → appSlug = `ROU12575` → URL = `https://eng-starter-apps-dev.outsystems.app/ROU12575`
 
 **Example**:
 ```markdown
@@ -91,7 +96,7 @@ OutSystems → N/A
 
 **Samples:**
 
-Screens → https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home
+Screens → https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause
 
 **Automated Tests:**
 
@@ -117,7 +122,8 @@ PR →
 - Links to related PRs or discussions
 - **ODC App URLs** (if applicable): Add as a comment when an ODC app is created for testing
   - Format: `ODC App: [URL](URL)` (use markdown link format for clickable link)
-  - Example: `ODC App: [https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home](https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home)`
+  - Use shareable URL **without** `/Home`: `https://eng-starter-apps-dev.outsystems.app/{appSlug}` (appSlug = app name with hyphens removed)
+  - Example: `ODC App: [https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause](https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause)`
 
 **Comment Format**:
 - Be concise but informative
@@ -179,12 +185,13 @@ When updating Jira, the AI MUST:
    - Include all required sections: Code, Points of Impact, Samples, Automated Tests, Test Cases
    - Use lettered bullet points (a, b, c, etc.) for test cases
    - Include **Expected:** (bolded) for expected results in test cases
-   - Include ODC App URL in Samples section if available
+   - Include ODC App URL in Samples section if available (shareable URL only, no `/Home`; appSlug = app name with hyphens removed; if app name = branch e.g. ROU-12575 then URL = `https://eng-starter-apps-dev.outsystems.app/ROU12575`)
+   - Fill PR links by running `gh pr list --head ROU-XXXX --state open --json url --jq '.[0].url'` in each repo
 5. Update "Release Note" custom field (`customfield_12701`) with user-focused description (see `skill:release-notes`)
 6. Add comment if significant decisions were made or if ODC App URL is available
    - **ODC App URLs MUST be added as comments, NOT in the "What I Did" section**
    - Format: `ODC App: [URL](URL)` (use markdown link format for clickable link)
-   - Example: `ODC App: [https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home](https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause/Home)`
+   - Example: `ODC App: [https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause](https://eng-starter-apps-dev.outsystems.app/ROU12451carouselpause)` (no `/Home`)
 7. Use clear, professional language
 8. Include relevant links (PR, Figma, etc.)
 
